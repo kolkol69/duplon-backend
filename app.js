@@ -4,9 +4,9 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
-
 var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+var passwordsRouter = require("./routes/passwords");
+var herokuRouter = require("./routes/herokuTest");
 
 var app = express();
 
@@ -22,7 +22,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/passwords", passwordsRouter);
+app.use("/heroku", herokuRouter);
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/client/build/index.html"));
+});
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "client/build")));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
