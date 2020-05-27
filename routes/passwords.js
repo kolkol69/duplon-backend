@@ -13,8 +13,6 @@ router.get("/", function (req, res, next) {
 
   // Return them as json
   res.json(passwords);
-
-  console.log(`Sent ${count} passwords`);
 });
 
 module.exports = router;
