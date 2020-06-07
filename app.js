@@ -28,7 +28,8 @@ const findUsers = async () => {
 };
 
 // createUser({
-//   name: "Ageless",
+//   name: "Maks",
+//   age: 24
 // });
 // findUsers();
 

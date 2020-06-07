@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
 
-const url = `mongodb://${process.env.MLAB_ADMIN_LOGIN}:${process.env.MLAB_ADMIN_PASSWORD}@ds237588.mlab.com:37588/${process.env.MLAB_DB_NAME}`;
-console.log("url", url);
+const url = process.env.MLAB_DB_URL;
 mongoose.connect(
   url,
   {
