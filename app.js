@@ -1,14 +1,38 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-var cors = require("cors");
-var indexRouter = require("./routes/index");
-var passwordsRouter = require("./routes/passwords");
-var herokuRouter = require("./routes/herokuTest");
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const cors = require("cors");
+const indexRouter = require("./routes/index");
+const passwordsRouter = require("./routes/passwords");
+const herokuRouter = require("./routes/herokuTest");
+require("./db/mongoose");
+const User = require("./db/models/user");
 
-var app = express();
+const createUser = async (data) => {
+  try {
+    const user = new User(data);
+    await user.save();
+  } catch (err) {
+    console.log("error: ", err);
+  }
+};
+
+const findUsers = async () => {
+  try {
+    const users = await User.find({});
+  } catch (err) {
+    console.log("error", err);
+  }
+};
+
+// createUser({
+//   name: "Ageless",
+// });
+// findUsers();
+
+const app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
