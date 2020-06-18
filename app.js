@@ -6,32 +6,10 @@ const logger = require("morgan");
 const cors = require("cors");
 const indexRouter = require("./routes/index");
 const passwordsRouter = require("./routes/passwords");
+const userRouter = require("./routes/User");
+// const couponRouter = require("./routes/Coupon");
 const herokuRouter = require("./routes/herokuTest");
 require("./db/mongoose");
-const User = require("./db/models/user");
-
-const createUser = async (data) => {
-  try {
-    const user = new User(data);
-    await user.save();
-  } catch (err) {
-    console.log("error: ", err);
-  }
-};
-
-const findUsers = async () => {
-  try {
-    const users = await User.find({});
-  } catch (err) {
-    console.log("error", err);
-  }
-};
-
-// createUser({
-//   name: "Maks",
-//   age: 24
-// });
-// findUsers();
 
 const app = express();
 
@@ -49,6 +27,11 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/passwords", passwordsRouter);
 app.use("/heroku", herokuRouter);
+app.use("/user/create", userRouter.create);
+app.use("/user/update", userRouter.update);
+app.use("/user/delete", userRouter.delete);
+app.use("/user/all", userRouter.findAll);
+// app.use("/coupon", couponRouter);
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
