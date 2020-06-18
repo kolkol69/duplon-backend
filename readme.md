@@ -16,6 +16,7 @@ Before starting, make sure you have `.env` file. (Ask @Maks)
 2. create a folder on your computer (mine is `/Users/maksymkolodiy/data/db`)
 3. run your db with `mongod --dbpath=/Users/maksymkolodiy/data/db`
 4. default listening on 127.0.0.1 port 27017 (mongodb://localhost:27017/mongo-duplon)
+5. adding .env to heroku (https://devcenter.heroku.com/articles/config-vars)
 
 # Prerequisites
 
