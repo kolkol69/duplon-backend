@@ -27,6 +27,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/passwords", passwordsRouter);
 app.use("/heroku", herokuRouter);
+app.use("/tenant/create", userRouter.createTenant);
 app.use("/user/create", userRouter.create);
 app.use("/user/update", userRouter.update);
 app.use("/user/delete", userRouter.delete);
