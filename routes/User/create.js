@@ -18,11 +18,13 @@ const createUser = async (req, res, data) => {
     res.send(
       new Buffer(`
     <h2>User created</h2>
-    <br>
     <p>
     Credentials: 
+      <br>
       tenantID: ${tenantID}
+      <br>
       login: ${login}
+      <br>
       password: ${password}
     </p>`)
     );

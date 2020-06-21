@@ -19,11 +19,12 @@ const createTenant = async (req, res, data) => {
     res.send(
       new Buffer(`
     <h2>Tenant created</h2>
-    <br>
     <p>
     Credentials: 
-        tenantID: ${identifier}
-        name: ${name}
+      <br>
+      tenantID: ${identifier}
+      <br>
+      name: ${name}
     </p>`)
     );
   } catch (err) {
