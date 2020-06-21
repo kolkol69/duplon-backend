@@ -14,18 +14,26 @@ const createUser = async (req, res, data) => {
   try {
     const user = new User(data);
     await user.save();
-    res.render("user", {
-      title: "User created",
-      body: `Credentials: 
-        tenantID: ${tenantID}
-        login: ${login}
-        password: ${password}`,
-    });
+    res.set("Content-Type", "text/html");
+    res.send(
+      new Buffer(`
+    <h2>User created</h2>
+    <br>
+    <p>
+    Credentials: 
+      tenantID: ${tenantID}
+      login: ${login}
+      password: ${password}
+    </p>`)
+    );
   } catch (err) {
     console.log("error: ", err);
-    res.render("user", {
-      title: "User not created",
-      body: err,
-    });
+    res.set("Content-Type", "text/html");
+    res.send(
+      new Buffer(`
+    <h2>User not created</h2>
+    <br>
+    <p>${err}</p>`)
+    );
   }
 };

@@ -15,19 +15,25 @@ const createTenant = async (req, res, data) => {
   try {
     const tenant = new Tenant({ name, identifier });
     await tenant.save();
-    res.render("user", {
-      title: "Tenant created",
-      body: `
-      Credentials: 
-        id: ${identifier}
+    res.set("Content-Type", "text/html");
+    res.send(
+      new Buffer(`
+    <h2>Tenant created</h2>
+    <br>
+    <p>
+    Credentials: 
+        tenantID: ${identifier}
         name: ${name}
-      `,
-    });
+    </p>`)
+    );
   } catch (err) {
     console.log("error: ", err);
-    res.render("user", {
-      title: "Tenant not created",
-      body: err,
-    });
+    res.set("Content-Type", "text/html");
+    res.send(
+      new Buffer(`
+      <h2>Tenant not created</h2>
+      <br>
+      <p>${err}</p>`)
+    );
   }
 };
