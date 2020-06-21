@@ -33,9 +33,9 @@ app.use("/user/update", userRouter.update);
 app.use("/user/delete", userRouter.delete);
 app.use("/user/all", userRouter.findAll);
 // app.use("/coupon", couponRouter);
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/client/build/index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname + "/client/build/index.html"));
+// });
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "client/build")));
