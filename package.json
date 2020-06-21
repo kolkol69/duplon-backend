@@ -11,6 +11,7 @@
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-readme": "^0.0.5",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "mongodb": "^3.5.8",

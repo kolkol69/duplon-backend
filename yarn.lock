@@ -51,6 +51,14 @@ asap@~1.0.0:
   resolved "https://registry.yarnpkg.com/asap/-/asap-1.0.0.tgz#b2a45da5fdfa20b0496fc3768cc27c12fa916a7d"
   integrity sha1-sqRdpf36ILBJb8N2jMJ8EvqRan0=
 
+asciidoctor.js@1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/asciidoctor.js/-/asciidoctor.js-1.5.2.tgz#db84048fb0a7c0f3c0e04e3331939e50ec55f81f"
+  integrity sha1-24QEj7CnwPPA4E4zMZOeUOxV+B8=
+  dependencies:
+    opal-npm-wrapper "git://github.com/anthonny/opal-npm-wrapper.git#0.1.1"
+    xmlhttprequest "~1.6.0"
+
 basic-auth@~2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/basic-auth/-/basic-auth-2.0.1.tgz#b998279bf47ce38344b4f3cf916d4679bbf51e3a"
@@ -276,6 +284,16 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
 
+express-readme@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/express-readme/-/express-readme-0.0.5.tgz#105cee5d120b935224debc479f0b566d6b52539e"
+  integrity sha1-EFzuXRILk1Ik3rxHnwtWbWtSU54=
+  dependencies:
+    asciidoctor.js "1.5.2"
+    github-markdown-css "2.4.1"
+    marked "0.3.6"
+    textile-js "2.0.1"
+
 express@^4.17.1:
   version "4.17.1"
   resolved "https://registry.yarnpkg.com/express/-/express-4.17.1.tgz#4491fc38605cf51f8629d39c2b5d026f98a4c134"
@@ -334,6 +352,11 @@ fresh@0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
   integrity sha1-PYyt2Q2XZWn6g1qx+OSyOhBWBac=
+
+github-markdown-css@2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/github-markdown-css/-/github-markdown-css-2.4.1.tgz#b4736d84eea8367a03b3248cf546dda3e8dc55e3"
+  integrity sha1-tHNthO6oNnoDsySM9Ubdo+jcVeM=
 
 "graceful-readlink@>= 1.0.0":
   version "1.0.1"
@@ -459,6 +482,11 @@ longest@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/longest/-/longest-1.0.1.tgz#30a0b2da38f73770e8294a0d22e6625ed77d0097"
   integrity sha1-MKCy2jj3N3DoKUoNIuZiXtd9AJc=
+
+marked@0.3.6:
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-0.3.6.tgz#b2c6c618fccece4ef86c4fc6cb8a7cbf5aeda8d7"
+  integrity sha1-ssbGGPzOzk74bE/Gy4p8v1rtqNc=
 
 media-typer@0.3.0:
   version "0.3.0"
@@ -620,6 +648,10 @@ on-headers@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/on-headers/-/on-headers-1.0.2.tgz#772b0ae6aaa525c399e489adfad90c403eb3c28f"
   integrity sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==
+
+"opal-npm-wrapper@git://github.com/anthonny/opal-npm-wrapper.git#0.1.1":
+  version "0.1.1"
+  resolved "git://github.com/anthonny/opal-npm-wrapper.git#b56048584b3cf2cfebeef78b0fff54690e12e684"
 
 optimist@~0.3.5:
   version "0.3.7"
@@ -849,6 +881,11 @@ string_decoder@~1.1.1:
   dependencies:
     safe-buffer "~5.1.0"
 
+textile-js@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/textile-js/-/textile-js-2.0.1.tgz#c390af8405ca3bb44dedf8407b1ff9134f01791f"
+  integrity sha1-w5CvhAXKO7RN7fhAex/5E08BeR8=
+
 toidentifier@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.0.tgz#7e1be3470f1e77948bc43d94a3c8f4d7752ba553"
@@ -941,6 +978,11 @@ wordwrap@~0.0.2:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-0.0.3.tgz#a3d5da6cd5c0bc0008d37234bbaf1bed63059107"
   integrity sha1-o9XabNXAvAAI03I0u68b7WMFkQc=
+
+xmlhttprequest@~1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/xmlhttprequest/-/xmlhttprequest-1.6.0.tgz#493d285f59266fdcb8d4fefd25345a7b693c966c"
+  integrity sha1-ST0oX1kmb9y41P79JTRae2k8lmw=
 
 yargs-parser@^16.0.0:
   version "16.1.0"

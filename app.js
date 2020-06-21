@@ -4,7 +4,6 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
-const indexRouter = require("./routes/index");
 const passwordsRouter = require("./routes/passwords");
 const userRouter = require("./routes/User");
 // const couponRouter = require("./routes/Coupon");
@@ -12,6 +11,12 @@ const herokuRouter = require("./routes/herokuTest");
 require("./db/mongoose");
 
 const app = express();
+
+// show BE readme
+require("express-readme")(app, {
+  filename: "readme.md",
+  routes: ["/", "/readme"],
+});
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -24,7 +29,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
 app.use("/passwords", passwordsRouter);
 app.use("/heroku", herokuRouter);
 app.use("/tenant/create", userRouter.createTenant);
@@ -33,9 +37,6 @@ app.use("/user/update", userRouter.update);
 app.use("/user/delete", userRouter.delete);
 app.use("/user/all", userRouter.findAll);
 // app.use("/coupon", couponRouter);
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname + "/client/build/index.html"));
-// });
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "client/build")));
