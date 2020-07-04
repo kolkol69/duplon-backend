@@ -7,7 +7,7 @@ const cors = require("cors");
 const passwordsRouter = require("./routes/passwords");
 const userRouter = require("./routes/User");
 // const couponRouter = require("./routes/Coupon");
-const herokuRouter = require("./routes/herokuTest");
+const emailRouter = require("./routes/emailing");
 require("./db/mongoose");
 
 const app = express();
@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/passwords", passwordsRouter);
-app.use("/heroku", herokuRouter);
+app.use("/send-email", emailRouter);
 app.use("/tenant/create", userRouter.createTenant);
 app.use("/user/create", userRouter.create);
 app.use("/user/update", userRouter.update);
