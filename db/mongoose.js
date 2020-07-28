@@ -10,6 +10,6 @@ mongoose.connect(
     useCreateIndex: true,
   },
   (err) => {
-    if (err) console.log(">>>ERROR<<<", err);
+    if (err) console.log(">>ERROR<<", err);
   }
 );
