@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
-  tenantID: { type: String, require: true },
+  tenantID: { type: mongoose.ObjectId, require: true },
   login: { type: String, require: true },
   password: { type: String, require: true },
 });
