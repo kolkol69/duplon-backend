@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
 
-const url = process.env.MLAB_DB_URL;
+const url = process.env.ATLAS_DB_URL;
 mongoose.connect(
   url,
   {
