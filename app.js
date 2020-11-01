@@ -4,8 +4,8 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
-const bodyParser = require('body-parser')
-const passwordsRouter = require("./routes/passwords");
+const bodyParser = require("body-parser");
+const randomsRouter = require("./routes/randoms");
 const userRouter = require("./routes/User");
 // const couponRouter = require("./routes/Coupon");
 const emailRouter = require("./routes/emailing");
@@ -24,17 +24,20 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
 app.use(cors());
-app.use( bodyParser.json() );       // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-  extended: true
-})); 
+app.use(bodyParser.json()); // to support JSON-encoded bodies
+app.use(
+  bodyParser.urlencoded({
+    // to support URL-encoded bodies
+    extended: true,
+  })
+);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/passwords", passwordsRouter);
+app.use("/randoms", randomsRouter);
 app.use("/send-email", emailRouter);
 app.use("/tenant/create", userRouter.createTenant);
 

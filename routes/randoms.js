@@ -1,18 +1,18 @@
 var express = require("express");
 var router = express.Router();
-const generatePassword = require("password-generator");
+const randomGenerator = require("password-generator");
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {
   const count = 5;
 
   // Generate some passwords
-  const passwords = Array.from(Array(count).keys()).map((i) =>
-    generatePassword(12, false)
+  const randomVals = Array.from(Array(count).keys()).map((i) =>
+    randomGenerator(12, false)
   );
 
   // Return them as json
-  res.json(passwords);
+  res.json(randomVals);
 });
 
 module.exports = router;
