@@ -37,10 +37,12 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/passwords", passwordsRouter);
 app.use("/send-email", emailRouter);
 app.use("/tenant/create", userRouter.createTenant);
-app.use("/user/create", userRouter.create);
-app.use("/user/update", userRouter.update);
-app.use("/user/delete", userRouter.delete);
-app.use("/user/all", userRouter.findAll);
+
+app.use("/user", userRouter.create);
+app.use("/user", userRouter.update);
+app.use("/user", userRouter.delete);
+app.use("/user", userRouter.findAll);
+
 // app.use("/coupon", couponRouter);
 
 // Serve static files from the React app

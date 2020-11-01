@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../../db/models/user");
 
-router.get("/", function (req, res, next) {
+router.get("/create", function (req, res) {
   createUser(req, res, req.query);
 });
 
