@@ -1,12 +1,15 @@
-const mongoose = require("mongoose");
-const couponSchema = new mongoose.Schema({
-  code: { type: String, require: true }, //actual code
-  couponID: { type: mongoose.ObjectId, require: true }, //unique globally
-  tenantID: { type: mongoose.ObjectId, require: true }, //tenantID ObjectID?? + we have it in tenanat object - redundancy for searching sake
-  random: { type: Long, require: true }, //random
-  pairedCouponID: { type: Long, require: true }, // paired couponID
-  status: { type: String, require: true }, //status
-});
-const Coupon = mongoose.model("Coupon", couponSchema);
+const mongoose = require('mongoose')
 
-module.exports = Coupon;
+const { Schema, SchemaTypes } = mongoose
+const { ObjectId, Number } = SchemaTypes
+const couponSchema = new Schema({
+  code: { type: String, require: true }, //actual code
+  couponID: { type: ObjectId, require: true }, //unique globally
+  tenantID: { type: ObjectId, require: true }, //tenantID ObjectID?? + we have it in tenanat object - redundancy for searching sake
+  random: { type: Number, require: true }, //random
+  pairedCouponID: { type: Number, require: true }, // paired couponID
+  status: { type: String, require: true }, //status
+})
+const Coupon = mongoose.model('Coupon', couponSchema)
+
+module.exports = Coupon
