@@ -20,30 +20,7 @@ Before starting, make sure you have `.env` file. (Ask @Maks)
 
 ## API
 
-### User
-
-// **WIP** -> work in progress, end point that you cant use yet
-
-* Create tenant (returns you tenantID to create user for this tenant)
-`/tenant/create?name=<tenantName>`
-
-* Create user (pass tenantID of the proper tenant)
-`/user/create?tenantID=<tenantID>&login=<userLogin>&password=<userPassword>`
-
-* **WIP** Update user 
-`/user/update`
-
-* **WIP** Delete user
-`/user/delete`
-
-* **WIP** Create coupon 
-`/coupon/update`
-
-* **WIP** Update coupon 
-`/coupon/update`
-
-* **WIP** Delete coupon
-`/coupon/delete`
+[Postman's API Documentation](https://documenter.getpostman.com/view/13365268/TVejhADz)
 
 # Prerequisites
 
