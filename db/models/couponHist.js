@@ -4,8 +4,8 @@ const { Schema, SchemaTypes } = mongoose
 const { ObjectId } = SchemaTypes
 const couponHistSchema = new Schema(
 	{
-		couponID: { type: ObjectId, require: true }, //coupon ID
-		userID: { type: ObjectId, require: true }, //user ID
+		couponId: { type: ObjectId, require: true }, //coupon ID
+		userId: { type: ObjectId, require: true }, //user ID
 		prevStatus: { type: String, require: true }, //previous status
 		newStatus: { type: String, require: true }, //new status
 	},

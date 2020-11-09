@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const { Schema, SchemaTypes } = mongoose
 const { ObjectId } = SchemaTypes
 const couponTypeSchema = new Schema({
-  tenantID: { type: ObjectId, require: true },
+  tenantId: { type: ObjectId, require: true },
   name: { type: String, require: true },
   paired: { type: Boolean, require: true },
   html: { type: String, require: false },
