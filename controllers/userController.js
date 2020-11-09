@@ -38,8 +38,6 @@ exports.getAllTenantUsers = async (req, res) => {
       tenantID: req.params.tenantId,
     })
 
-    console.log('tenantId: ', req.params.tenantId)
-    console.log('users', users)
     res.json({
       status: 'success',
       data: users,
