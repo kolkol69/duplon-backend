@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+const { isEmpty } = require('ramda')
 const Tenant = require('../db/models/tenant')
 
 exports.checkBody = (req, res, next) => {
@@ -6,6 +7,19 @@ exports.checkBody = (req, res, next) => {
     return res.status(400).json({
       status: 'invalid',
       message: 'Missing name or active status',
+    })
+  }
+  next()
+}
+
+exports.checkIfTenantUniq = async (req, res, next) => {
+  const tenant = await Tenant.find({
+    name: req.body.name,
+  })
+  if (!isEmpty(tenant)) {
+    return res.status(400).json({
+      status: 'invalid',
+      message: 'Tenant with the same name already exists!',
     })
   }
   next()

@@ -9,9 +9,13 @@ const {
   checkBody,
   updateTenant,
   deleteTenant,
+  checkIfTenantUniq,
 } = tenantController
 
-router.route('/').get(getAllTenants).post(checkBody, createTenant)
+router
+  .route('/')
+  .get(getAllTenants)
+  .post(checkBody, checkIfTenantUniq, createTenant)
 router
   .route('/:tenantId')
   .get(getTenant)
