@@ -1,0 +1,53 @@
+{
+    "env": {
+      "node": true,
+      "commonjs": true,
+      "es6": true
+    },
+    "extends": ["airbnb", "prettier", "plugin:node/recommended"],
+    "plugins": ["prettier"],
+  
+    "globals": {
+      "Atomics": "readonly",
+      "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+      "ecmaVersion": 2018
+    },
+    "rules": {
+        "curly": ["warn", "all"],
+        "no-multi-spaces": ["warn", { "ignoreEOLComments": false }],
+        "prettier/prettier": ["error"],
+        "react/jsx-uses-react": "warn",
+        "linebreak-style": ["error", "unix"],
+        "newline-after-var": ["warn", "always"],
+        "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+        "global-require": "off",
+        "react/prop-types": 0,
+        "no-unreachable": ["warn"],
+        "eol-last": ["warn", "always"],
+        "arrow-body-style": ["error", "as-needed"],
+        "no-debugger": "warn",
+        "no-multiple-empty-lines": ["warn", { "max": 2, "maxBOF": 0, "maxEOF": 1 }],
+        "react/display-name": 0,
+        "quotes": ["warn", "single", { "avoidEscape": true }],
+        "no-console": 1,
+        "no-undef": 2,
+        "prefer-const": 2,
+        "import/order": [
+          "warn",
+          {
+            "groups": ["external", "internal"]
+          }
+        ],
+        "import/no-extraneous-dependencies": ["warn"],
+        "import/no-unresolved": [
+          2,
+          {
+            "ignore": ["react-native"]
+          }
+        ],
+        "consistent-return": "off",
+        "no-underscore-dangle": "off"
+    }
+  }

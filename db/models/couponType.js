@@ -6,7 +6,7 @@ const couponTypeSchema = new Schema({
   tenantId: { type: ObjectId, require: true },
   name: { type: String, require: true },
   paired: { type: Boolean, require: true },
-  html: { type: String, require: false },
+  html: { type: String, require: false }
 })
 const CouponType = mongoose.model('CouponType', couponTypeSchema)
 

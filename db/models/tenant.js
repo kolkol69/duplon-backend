@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
+
 const tenantSchema = new mongoose.Schema({
-	name: { type: String, require: true },
-	activeStatus: { type: Date, require: true },
+  name: { type: String, require: true },
+  activeStatus: { type: Date, require: true }
 })
 const Tenant = mongoose.model('Tenant', tenantSchema)
 

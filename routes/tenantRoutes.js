@@ -1,4 +1,5 @@
 const express = require('express')
+
 const router = express.Router()
 const tenantController = require('../controllers/tenantController')
 
@@ -9,7 +10,7 @@ const {
   checkBody,
   updateTenant,
   deleteTenant,
-  checkIfTenantUniq,
+  checkIfTenantUniq
 } = tenantController
 
 router
