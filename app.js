@@ -6,6 +6,7 @@ const logger = require('morgan')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 
+const tenantRouter = require('./routes/tenantRoutes')
 const userRouter = require('./routes/userRoutes')
 // const couponRouter = require("./routes/Coupon");
 const emailRouter = require('./routes/emailingRoutes')
@@ -39,6 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/send-email', emailRouter)
 app.use('/api/v1/users', userRouter)
+app.use('/api/v1/tenants', tenantRouter)
 // app.use("/coupon", couponRouter);
 
 // Serve static files from the React app
