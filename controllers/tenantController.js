@@ -1,8 +1,19 @@
 /* eslint-disable no-unused-vars */
 const Tenant = require('../db/models/tenant')
 
-exports.createTenant = async (req, res, data) => {
-  // const { login, password, tenantID } = data
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.activeStatus) {
+    return res.status(400).json({
+      status: 'invalid',
+      message: 'Missing name or active status',
+    })
+  }
+  next()
+}
+
+exports.createTenant = async (req, res) => {
+  // console.log('req.body', req.body)
+  // const { name, active } = req.body
   //   try {
   //     const tenant = new Tenant(data)
   //     await tenant.save()
@@ -24,19 +35,26 @@ exports.getAllTenants = async (req, res) => {
       data: tenants,
     })
   } catch (err) {
-    console.log(err)
+    res.status(404).json({
+      status: 'invalid',
+      data: null,
+    })
   }
-  res.status(204).json({
-    status: 'success',
-    data: null,
-  })
 }
 
 exports.getTenant = async (req, res) => {
-  res.status(500).json({
-    status: 'success',
-    message: 'getTenant route is not defined yet!',
-  })
+  try {
+    const tenants = await Tenant.findById(req.params.tenantId)
+    res.json({
+      status: 'success',
+      data: tenants,
+    })
+  } catch (err) {
+    res.status(404).json({
+      status: 'invalid',
+      data: null,
+    })
+  }
 }
 
 exports.deleteTenant = async (req, res) => {
