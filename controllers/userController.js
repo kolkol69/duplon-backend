@@ -32,6 +32,26 @@ exports.getAllUsers = async (req, res) => {
   })
 }
 
+exports.getAllTenantUsers = async (req, res) => {
+  try {
+    const users = await User.find({
+      tenantID: req.params.tenantId,
+    })
+
+    console.log('tenantId: ', req.params.tenantId)
+    console.log('users', users)
+    res.json({
+      status: 'success',
+      data: users,
+    })
+  } catch (message) {
+    res.status(404).json({
+      status: 'error',
+      message,
+    })
+  }
+}
+
 exports.getUser = async (req, res) => {
   res.status(500).json({
     status: 'success',
