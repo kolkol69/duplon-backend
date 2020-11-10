@@ -18,9 +18,9 @@ exports.createUser = async (req, res, data) => {
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({})
+    const users = await User.find()
 
-    res.json({
+    return res.json({
       status: 'success',
       result: users.length,
       data: users
@@ -60,16 +60,24 @@ exports.getUser = async (req, res) => {
   })
 }
 
+exports.updateUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.userId, req.body, {
+      new: true
+    })
+
+    res.status(200).json({ status: 'success', data: { user } })
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err
+    })
+  }
+}
+
 exports.deleteUser = async (req, res) => {
   res.status(500).json({
     status: 'success',
     message: 'deleteUser route is not defined yet!'
-  })
-}
-
-exports.updateUser = async (req, res) => {
-  res.status(500).json({
-    status: 'success',
-    message: 'updateUser route is not defined yet!'
   })
 }

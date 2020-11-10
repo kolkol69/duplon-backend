@@ -12,12 +12,8 @@ const {
   deleteUser
 } = userController
 
-router.route('/').get(getAllUsers).post(createUser)
-router.route('/:tenantId').get(getAllTenantUsers)
-router
-  .route('/:tenantId/:userId')
-  .get(getUser)
-  .patch(updateUser)
-  .delete(deleteUser)
+router.route('/').get(getAllUsers)
+router.route('/:tenantId').get(getAllTenantUsers).post(createUser)
+router.route('/:userId').get(getUser).patch(updateUser).delete(deleteUser)
 
 module.exports = router
