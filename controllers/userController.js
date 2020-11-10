@@ -22,6 +22,7 @@ exports.getAllUsers = async (req, res) => {
 
     res.json({
       status: 'success',
+      result: users.length,
       data: users
     })
   } catch (err) {
@@ -41,11 +42,12 @@ exports.getAllTenantUsers = async (req, res) => {
 
     res.json({
       status: 'success',
+      result: users.length,
       data: users
     })
   } catch (message) {
     res.status(404).json({
-      status: 'error',
+      status: 'fail',
       message
     })
   }

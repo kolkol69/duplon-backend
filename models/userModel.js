@@ -5,7 +5,7 @@ const { ObjectId } = SchemaTypes
 const userSchema = new Schema({
   tenantId: { type: ObjectId, require: true },
   access: { type: String, default: 'default' },
-  login: { type: String, require: true },
+  login: { type: String, require: true, unique: true },
   password: { type: String, require: true }
 })
 const User = mongoose.model('User', userSchema)
