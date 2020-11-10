@@ -7,12 +7,11 @@ const {
   getTenant,
   getAllTenants,
   createTenant,
-  checkBody,
   updateTenant,
   deleteTenant
 } = tenantController
 
-router.route('/').get(getAllTenants).post(checkBody, createTenant)
+router.route('/').get(getAllTenants).post(createTenant)
 router
   .route('/:tenantId')
   .get(getTenant)

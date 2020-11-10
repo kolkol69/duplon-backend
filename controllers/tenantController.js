@@ -1,16 +1,6 @@
 const Tenant = require('../models/tenantModel')
 const User = require('../models/userModel')
 
-exports.checkBody = (req, res, next) => {
-  if (!req.body.name) {
-    return res.status(400).json({
-      status: 'invalid',
-      message: 'Missing name or active status'
-    })
-  }
-  next()
-}
-
 exports.createTenant = async (req, res) => {
   const tenant = new Tenant(req.body)
 
