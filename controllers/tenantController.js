@@ -67,6 +67,14 @@ exports.getAllTenants = async (req, res) => {
     const fields = chooseFields(req.query.fields)
     const { skip, limit } = pagination(req.query)
 
+    if (req.query.page) {
+      const numOfTenants = await Tenant.countDocuments()
+
+      if (skip > numOfTenants) {
+        throw new Error('This page does not exist')
+      }
+    }
+
     const query = Tenant.find(queryString)
       .sort(sortBy)
       .select(fields)
