@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const User = require('../db/models/user')
+const User = require('../models/userModel')
 
 exports.createUser = async (req, res, data) => {
   // const { login, password, tenantID } = data

@@ -1,27 +1,11 @@
-/* eslint-disable no-unused-vars */
-const { isEmpty } = require('ramda')
-const Tenant = require('../db/models/tenant')
-const User = require('../db/models/user')
+const Tenant = require('../models/tenantModel')
+const User = require('../models/userModel')
 
 exports.checkBody = (req, res, next) => {
-  if (!req.body.name || !req.body.activeStatus) {
+  if (!req.body.name) {
     return res.status(400).json({
       status: 'invalid',
       message: 'Missing name or active status'
-    })
-  }
-  next()
-}
-
-exports.checkIfTenantUniq = async (req, res, next) => {
-  const tenant = await Tenant.find({
-    name: req.body.name
-  })
-
-  if (!isEmpty(tenant)) {
-    return res.status(400).json({
-      status: 'invalid',
-      message: 'Tenant with the same name already exists!'
     })
   }
   next()
@@ -31,27 +15,40 @@ exports.createTenant = async (req, res) => {
   console.log('req.body', req.body)
   const { name, activeStatus } = req.body
 
-  try {
-    const tenant = new Tenant({ name, activeStatus })
+  const tenant = new Tenant({ name, activeStatus })
 
-    await tenant.save()
-    const adminUser = new User({
-      tenantId: tenant._id,
-      access: 'full', // oneOf[full, limitted]
-      login: `${name.replace(/\s/g, '')}_login`,
-      password: `${name.replace(/\s/g, '')}_password`
-    })
+  await tenant
+    .save()
+    .then(({ _id }) => {
+      const adminUser = new User({
+        tenantId: _id,
+        access: 'full', // oneOf[full, limitted]
+        login: `${name.replace(/\s/g, '')}_login`,
+        password: `${name.replace(/\s/g, '')}_password`
+      })
 
-    await adminUser.save()
-  } catch (err) {
-    res.status(400).json({
-      status: 'invalid',
-      message: `
-      Tenant wasn't created!
-      Error: ${err}
-      `
+      adminUser
+        .save()
+        .then(() => res.status(200))
+        .catch((err) => {
+          res.status(400).json({
+            status: 'invalid',
+            message: `
+              User wasn't created!
+              Error: ${err}
+          `
+          })
+        })
     })
-  }
+    .catch((err) => {
+      res.status(400).json({
+        status: 'invalid',
+        message: `
+          Tenant wasn't created!
+          Error: ${err}
+        `
+      })
+    })
 }
 
 exports.getAllTenants = async (req, res) => {

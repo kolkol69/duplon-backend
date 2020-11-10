@@ -9,14 +9,10 @@ const {
   createTenant,
   checkBody,
   updateTenant,
-  deleteTenant,
-  checkIfTenantUniq
+  deleteTenant
 } = tenantController
 
-router
-  .route('/')
-  .get(getAllTenants)
-  .post(checkBody, checkIfTenantUniq, createTenant)
+router.route('/').get(getAllTenants).post(checkBody, createTenant)
 router
   .route('/:tenantId')
   .get(getTenant)
