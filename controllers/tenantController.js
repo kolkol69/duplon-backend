@@ -28,7 +28,20 @@ exports.createTenant = async (req, res) => {
 
 exports.getAllTenants = async (req, res) => {
   try {
-    const tenants = await Tenant.find()
+    const queryObject = { ...req.query }
+    const excludeFileds = ['page', 'sort', 'limit', 'fields']
+
+    excludeFileds.forEach((field) => delete queryObject[field])
+    const queryString = JSON.parse(
+      JSON.stringify(queryObject).replace(
+        /(gt|gte|lt|gt)/g,
+        (match) => `$${match}`
+      )
+    )
+
+    const query = Tenant.find(queryString)
+
+    const tenants = await query
 
     res.json({
       status: 'success',
