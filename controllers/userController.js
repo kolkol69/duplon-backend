@@ -76,8 +76,14 @@ exports.updateUser = async (req, res) => {
 }
 
 exports.deleteUser = async (req, res) => {
-  res.status(500).json({
-    status: 'success',
-    message: 'deleteUser route is not defined yet!'
-  })
+  try {
+    const user = await User.findByIdAndDelete(req.params.userId)
+
+    res.status(200).json({ status: 'success', data: { user } })
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err
+    })
+  }
 }
