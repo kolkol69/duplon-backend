@@ -79,8 +79,14 @@ exports.updateTenant = async (req, res) => {
 }
 
 exports.deleteTenant = async (req, res) => {
-  res.status(500).json({
-    status: 'success',
-    message: 'deleteTenant route is not defined yet!'
-  })
+  try {
+    const tenant = await Tenant.findByIdAndDelete(req.params.tenantId)
+
+    res.status(200).json({ status: 'success', data: { tenant } })
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err
+    })
+  }
 }
