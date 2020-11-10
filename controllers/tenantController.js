@@ -1,12 +1,67 @@
 const Tenant = require('../models/tenantModel')
 const User = require('../models/userModel')
 
-const DEFAULT_LIMIT = 10
+const DEFAULT_LIMIT = 100
 const DEFAULT_PAGE = 1
 const DEFAULT_SORT = '-joinDate'
+const DEFAULT_LIMIT_FIELDS = '-__v'
 const USER_ACCESS = {
   FULL: 'full',
   DEFAULT: 'default'
+}
+
+class APIFeatures {
+  constructor(query, queryString) {
+    this.query = query
+    this.queryString = queryString
+  }
+
+  filter() {
+    const queryObject = { ...this.queryString }
+    const excludeFileds = ['page', 'sort', 'limit', 'fields']
+
+    excludeFileds.forEach((field) => delete queryObject[field])
+    const normalizedQuery = JSON.stringify(queryObject).replace(
+      /(gt|gte|lt|gt)/g,
+      (match) => `$${match}`
+    )
+
+    this.query = this.query.find(JSON.parse(normalizedQuery))
+
+    return this
+  }
+
+  sort() {
+    if (this.queryString.sort) {
+      const sortBy = this.queryString.sort.split(',').join(' ')
+
+      this.query = this.query.sort(sortBy)
+    } else {
+      this.query = this.query.sort(DEFAULT_SORT)
+    }
+    return this
+  }
+
+  limitFields() {
+    if (this.queryString.fields) {
+      const fields = this.queryString.fields.split(',').join(' ')
+
+      this.query = this.query.select(fields)
+    } else {
+      this.query = this.query.select(DEFAULT_LIMIT_FIELDS)
+    }
+    return this
+  }
+
+  paginate() {
+    const page = +this.queryString.page || DEFAULT_PAGE
+    const limit = +this.queryString.limit || DEFAULT_LIMIT
+    const skip = (page - 1) * limit
+
+    this.query = this.query.skip(skip).limit(limit)
+
+    return this
+  }
 }
 
 exports.createTenant = async (req, res) => {
@@ -34,54 +89,14 @@ exports.createTenant = async (req, res) => {
   }
 }
 
-const filter = (filterOptions) => {
-  const queryObject = { ...filterOptions }
-  const excludeFileds = ['page', 'sort', 'limit', 'fields']
-
-  excludeFileds.forEach((field) => delete queryObject[field])
-  return JSON.parse(
-    JSON.stringify(queryObject).replace(
-      /(gt|gte|lt|gt)/g,
-      (match) => `$${match}`
-    )
-  )
-}
-const sort = (sortOptions) =>
-  sortOptions ? sortOptions.split(',').join(' ') : DEFAULT_SORT
-
-const chooseFields = (fieldOptions) =>
-  fieldOptions ? fieldOptions.split(',').join(' ') : '-__v'
-
-const pagination = (query) => {
-  const page = +query.page || DEFAULT_PAGE
-  const limit = +query.limit || DEFAULT_LIMIT
-  const skip = (page - 1) * limit
-
-  return { skip, limit }
-}
-
 exports.getAllTenants = async (req, res) => {
   try {
-    const queryString = filter(req.query)
-    const sortBy = sort(req.query.sort)
-    const fields = chooseFields(req.query.fields)
-    const { skip, limit } = pagination(req.query)
-
-    if (req.query.page) {
-      const numOfTenants = await Tenant.countDocuments()
-
-      if (skip > numOfTenants) {
-        throw new Error('This page does not exist')
-      }
-    }
-
-    const query = Tenant.find(queryString)
-      .sort(sortBy)
-      .select(fields)
-      .skip(skip)
-      .limit(limit)
-
-    const tenants = await query
+    const features = new APIFeatures(Tenant.find(), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate()
+    const tenants = await features.query
 
     res.json({
       status: 'success',
