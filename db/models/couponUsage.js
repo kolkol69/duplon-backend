@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const { Schema, SchemaTypes } = mongoose
-const { ObjectId, Number } = SchemaTypes
+const { ObjectId } = SchemaTypes
 const couponUsageSchema = new Schema({
   tenantId: { type: ObjectId, require: true },
   usedAll: { type: Number, require: true }, // previous status

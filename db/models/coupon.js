@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const { Schema, SchemaTypes } = mongoose
-const { ObjectId, Number } = SchemaTypes
+const { ObjectId } = SchemaTypes
 const couponSchema = new Schema({
   code: { type: String, require: true }, // actual code
   couponId: { type: ObjectId, require: true }, // unique globally
