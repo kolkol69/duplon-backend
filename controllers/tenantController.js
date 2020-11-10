@@ -12,24 +12,21 @@ exports.checkBody = (req, res, next) => {
 }
 
 exports.createTenant = async (req, res) => {
-  console.log('req.body', req.body)
-  const { name, activeStatus } = req.body
-
-  const tenant = new Tenant({ name, activeStatus })
+  const tenant = new Tenant(req.body)
 
   await tenant
     .save()
-    .then(({ _id }) => {
+    .then(({ _id, name }) => {
       const adminUser = new User({
         tenantId: _id,
-        access: 'full', // oneOf[full, limitted]
+        access: 'full', // oneOf[full, default]
         login: `${name.replace(/\s/g, '')}_login`,
         password: `${name.replace(/\s/g, '')}_password`
       })
 
       adminUser
         .save()
-        .then(() => res.status(200))
+        .then(() => res.status(200).json({ status: 'success' }))
         .catch((err) => {
           res.status(400).json({
             status: 'invalid',
