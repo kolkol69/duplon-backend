@@ -13,7 +13,7 @@ const couponSchema = new Schema({
   random: { type: Number, require: true },
   expDate: { type: Date, default: nextMonth },
   createdAt: { type: Date, default: Date.now() },
-  type: { type: String, require: true }
+  typeId: { type: ObjectId, require: true }
 })
 const Coupon = mongoose.model('Coupon', couponSchema)
 
