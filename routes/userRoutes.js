@@ -13,7 +13,7 @@ const {
 } = userController
 
 router.route('/').get(getAllUsers)
-router.route('/:tenantId').get(getAllTenantUsers).post(createUser)
+router.route('tenant/:tenantId').get(getAllTenantUsers).post(createUser)
 router.route('/:userId').get(getUser).patch(updateUser).delete(deleteUser)
 
 module.exports = router

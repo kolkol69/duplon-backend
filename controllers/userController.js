@@ -54,10 +54,20 @@ exports.getAllTenantUsers = async (req, res) => {
 }
 
 exports.getUser = async (req, res) => {
-  res.status(500).json({
-    status: 'success',
-    message: 'getUser route is not defined yet!'
-  })
+  try {
+    const user = await User.findById(req.params.userId)
+
+    res.json({
+      status: 'success',
+      data: { user }
+    })
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      data: null,
+      message: err
+    })
+  }
 }
 
 exports.updateUser = async (req, res) => {
