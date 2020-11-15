@@ -25,8 +25,11 @@ exports.getAllUsers = async (req, res) => {
       result: users.length,
       data: users
     })
-  } catch (err) {
-    console.log(err)
+  } catch (error) {
+    res.status(404).json({
+      status: 'fail',
+      error
+    })
   }
   res.status(204).json({
     status: 'success',
@@ -45,10 +48,10 @@ exports.getAllTenantUsers = async (req, res) => {
       result: users.length,
       data: users
     })
-  } catch (message) {
+  } catch (error) {
     res.status(404).json({
       status: 'fail',
-      message
+      error
     })
   }
 }
@@ -61,11 +64,11 @@ exports.getUser = async (req, res) => {
       status: 'success',
       data: { user }
     })
-  } catch (err) {
+  } catch (error) {
     res.status(404).json({
       status: 'fail',
       data: null,
-      message: err
+      error
     })
   }
 }
@@ -77,10 +80,10 @@ exports.updateUser = async (req, res) => {
     })
 
     res.status(200).json({ status: 'success', data: { user } })
-  } catch (err) {
+  } catch (error) {
     res.status(400).json({
       status: 'fail',
-      message: err
+      error
     })
   }
 }
@@ -90,10 +93,10 @@ exports.deleteUser = async (req, res) => {
     const user = await User.findByIdAndDelete(req.params.userId)
 
     res.status(200).json({ status: 'success', data: { user } })
-  } catch (err) {
+  } catch (error) {
     res.status(400).json({
       status: 'fail',
-      message: err
+      error
     })
   }
 }
