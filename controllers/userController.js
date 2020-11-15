@@ -1,22 +1,25 @@
-/* eslint-disable no-unused-vars */
 const User = require('../models/userModel')
 
-exports.createUser = async (req, res, data) => {
-  // const { login, password, tenantID } = data
-  //   try {
-  //     const user = new User(data)
-  //     await user.save()
-  //   } catch (err) {
-  //     console.log('error: ', err)
-  //   }
-
-  res.status(500).json({
-    status: 'success',
-    message: 'createUser route is not defined yet!'
+exports.createUser = async (req, res) => {
+  console.log('>>body:', {
+    ...req.params,
+    ...req.body
   })
+
+  try {
+    await User.create({
+      ...req.params,
+      ...req.body
+    }).then((response) => res.status(200).json({ status: 'success', response }))
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err
+    })
+  }
 }
 
-exports.getAllUsers = async (req, res) => {
+exports.getAllUsers = async (_, res) => {
   try {
     const users = await User.find()
 
