@@ -3,7 +3,6 @@ const User = require('../models/userModel')
 exports.createUser = async (req, res) => {
   try {
     await User.create({
-      ...req.params,
       ...req.body
     }).then((response) =>
       res.status(200).json({ status: 'success', data: { response } })
@@ -37,24 +36,24 @@ exports.getAllUsers = async (_, res) => {
   })
 }
 
-exports.getAllTenantUsers = async (req, res) => {
-  try {
-    const users = await User.find({
-      tenantId: req.params.tenantId
-    })
+// exports.getAllTenantUsers = async (req, res) => {
+//   try {
+//     const users = await User.find({
+//       tenantId: req.params.tenantId
+//     })
 
-    res.json({
-      status: 'success',
-      result: users.length,
-      data: users
-    })
-  } catch (error) {
-    res.status(404).json({
-      status: 'fail',
-      error
-    })
-  }
-}
+//     res.json({
+//       status: 'success',
+//       result: users.length,
+//       data: users
+//     })
+//   } catch (error) {
+//     res.status(404).json({
+//       status: 'fail',
+//       error
+//     })
+//   }
+// }
 
 exports.getUser = async (req, res) => {
   try {
