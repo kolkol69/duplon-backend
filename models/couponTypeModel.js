@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
 
-const { Schema, SchemaTypes } = mongoose
-const { ObjectId } = SchemaTypes
+const { Schema } = mongoose
 const couponTypeSchema = new Schema({
-  tenantId: { type: ObjectId, require: true },
-  name: { type: String, require: true },
-  paired: { type: Boolean, require: true, default: false }
+  html: { type: String },
+  val: { type: Number, require: true },
+  title: { type: String, require: true },
+  descr: { type: String, require: true }
 })
 const CouponType = mongoose.model('CouponType', couponTypeSchema)
 
