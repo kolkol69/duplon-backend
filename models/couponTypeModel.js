@@ -4,6 +4,7 @@ const { Schema, ObjectId } = mongoose
 const couponTypeSchema = new Schema({
   tenantId: { type: ObjectId, require: true },
   html: { type: String },
+  discountType: { type: String, default: 'percentage' }, // oneOf(["percentage", "value"])
   val: {
     type: Number,
     require: true,
