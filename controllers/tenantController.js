@@ -1,5 +1,7 @@
 const Tenant = require('../models/tenantModel')
 const User = require('../models/userModel')
+const Coupon = require('../models/couponModel')
+const CouponType = require('../models/couponTypeModel')
 const APIFeatures = require('../utils/apiFeatures')
 
 const USER_ACCESS = {
@@ -106,6 +108,42 @@ exports.deleteTenant = async (req, res) => {
 exports.getAllTenantUsers = async (req, res) => {
   try {
     const users = await User.find({
+      tenantId: req.body.tenantId
+    })
+
+    res.json({
+      status: 'success',
+      result: users.length,
+      data: users
+    })
+  } catch (error) {
+    res.status(404).json({
+      status: 'fail',
+      error
+    })
+  }
+}
+exports.getAllTenantCoupons = async (req, res) => {
+  try {
+    const users = await Coupon.find({
+      tenantId: req.body.tenantId
+    })
+
+    res.json({
+      status: 'success',
+      result: users.length,
+      data: users
+    })
+  } catch (error) {
+    res.status(404).json({
+      status: 'fail',
+      error
+    })
+  }
+}
+exports.getAllTenantCouponsTypes = async (req, res) => {
+  try {
+    const users = await CouponType.find({
       tenantId: req.body.tenantId
     })
 

@@ -9,10 +9,14 @@ const {
   createTenant,
   updateTenant,
   deleteTenant,
-  getAllTenantUsers
+  getAllTenantUsers,
+  getAllTenantCoupons,
+  getAllTenantCouponsTypes,
 } = tenantController
 
 router.route('/users').get(getAllTenantUsers)
+router.route('/coupons').get(getAllTenantCoupons)
+router.route('/coupons-type').get(getAllTenantCouponsTypes)
 router.route('/').get(getAllTenants).post(createTenant)
 router
   .route('/:tenantId')
