@@ -7,14 +7,13 @@ const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, now.getDay())
 
 const statusHistorySchema = new Schema({
   userId: { type: ObjectId, require: true },
-  status: { type: String, require: true },
+  status: { type: String, require: true }, // OneOf([issued, expired, redeemed])
   changeDate: { type: Date, default: Date.now() }
 })
 
 const couponSchema = new Schema({
   tenantId: { type: ObjectId, require: true },
   PCId: { type: ObjectId, default: null }, // pairedCouponId
-  status: { type: String, require: true }, // OneOf([issued, expired, redeemed])
   history: [statusHistorySchema],
   expDate: { type: Date, default: nextMonth },
   createdAt: { type: Date, default: Date.now() },
