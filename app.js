@@ -9,6 +9,7 @@ const path = require('path')
 const tenantRouter = require('./routes/tenantRoutes')
 const userRouter = require('./routes/userRoutes')
 const couponTypeRouter = require('./routes/couponTypeRoutes')
+const couponRouter = require('./routes/couponRoutes')
 const emailRouter = require('./routes/emailingRoutes')
 
 require('./db/mongoose')
@@ -42,6 +43,7 @@ require('express-readme')(app, {
 app.use('/send-email', emailRouter)
 app.use('/api/v1/users', userRouter)
 app.use('/api/v1/tenants', tenantRouter)
+app.use('/api/v1/coupon', couponRouter)
 app.use('/api/v1/coupon/type', couponTypeRouter)
 app.use('/api', (req, res) => {
   res.redirect(process.env.API_DOCUMENTATION)
