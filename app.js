@@ -43,8 +43,8 @@ require('express-readme')(app, {
 app.use('/send-email', emailRouter)
 app.use('/api/v1/users', userRouter)
 app.use('/api/v1/tenants', tenantRouter)
+app.use('/api/v1/coupons/type', couponTypeRouter)
 app.use('/api/v1/coupons', couponRouter)
-app.use('/api/v1/coupons-type', couponTypeRouter)
 app.use('/api', (req, res) => {
   res.redirect(process.env.API_DOCUMENTATION)
 })
