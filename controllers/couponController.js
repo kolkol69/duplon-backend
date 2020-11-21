@@ -1,18 +1,94 @@
+require('dotenv').config()
+const QRCode = require('qrcode')
 const Coupon = require('../models/couponModel')
 
-// const QRCode = require('qrcode')
-// QRCode.toDataURL('https://google.com', (err, url) => {
-//   console.log(url)
-//   res.status(200).json({ data: url })
-// })
+const apiUrl = process.env.API_URL
+const COUPON_STATUSES = {
+  redemeed: 'redeemed',
+  expired: 'expired',
+  issued: 'issued'
+}
 
-exports.createCoupon = async (req, res) => {
+exports.deleteAllCoupons = async (req, res) => {
+  try {
+    Coupon.deleteMany({}, (response) => {
+      res.status(200).json({
+        status: 'success',
+        response
+      })
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      error
+    })
+  }
+}
+
+exports.getQrCode = async (req, res) => {
+  try {
+    QRCode.toDataURL(apiUrl, (err, url) => {
+      if (err) {
+        res.status(400).json({
+          status: 'fail',
+          error: err
+        })
+      }
+      res.status(200).json({
+        status: 'success',
+        url
+      })
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      error
+    })
+  }
+}
+
+exports.redeemCoupon = async (req, res) => {
+  try {
+    const { userId, couponId } = req.query
+
+    const history = {
+      userId,
+      status: COUPON_STATUSES.redemeed
+    }
+
+    await Coupon.findOneAndUpdate({ _id: couponId }, { $push: { history } })
+    res.status(200).json({
+      status: 'success'
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      error
+    })
+  }
+}
+
+exports.issueCoupon = async (req, res) => {
   try {
     await Coupon.create({
       ...req.body
-    }).then((response) =>
-      res.status(200).json({ status: 'success', data: { response } })
-    )
+    }).then((coupon) => {
+      QRCode.toDataURL(
+        `${apiUrl}/coupons/redeem?userId=${req.body.history.userId}&couponId=${coupon._id}`,
+        (err, url) => {
+          if (err) {
+            res.status(400).json({
+              status: 'fail',
+              error: err
+            })
+          }
+          res.status(200).json({
+            status: 'success',
+            data: { coupon, url }
+          })
+        }
+      )
+    })
   } catch (err) {
     res.status(400).json({
       status: 'fail',
@@ -60,17 +136,17 @@ exports.getCoupon = async (req, res) => {
 }
 
 exports.updateCoupon = async (req, res) => {
-  const { history, ...requestBody } = req.body
-
-  if (history) {
-    await Coupon.findOneAndUpdate(
-      { _id: req.params.couponId },
-      { $push: { history } },
-      { upsert: true, new: true }
-    )
-  }
-
   try {
+    const { history, ...requestBody } = req.body
+
+    if (history) {
+      await Coupon.findOneAndUpdate(
+        { _id: req.params.couponId },
+        { $push: { history } },
+        { upsert: true, new: true }
+      )
+    }
+
     const coupon = await Coupon.findByIdAndUpdate(
       req.params.couponId,
       requestBody,
