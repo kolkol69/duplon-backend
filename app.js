@@ -1,4 +1,3 @@
-const createError = require('http-errors')
 const express = require('express')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
@@ -6,6 +5,8 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const path = require('path')
 
+const AppError = require('./utils/appError')
+const globalErrorHandler = require('./controllers/errorController')
 const tenantRouter = require('./routes/tenantRoutes')
 const userRouter = require('./routes/userRoutes')
 const couponTypeRouter = require('./routes/couponTypeRoutes')
@@ -51,11 +52,10 @@ app.use('/api/postman', (req, res) => {
 })
 
 // catch 404
-app.all('*', (req, res) => {
-  res.status(404).send({
-    status: 'fail',
-    message: `Can't find ${req.originalUrl} on this server!`
-  })
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404))
 })
+
+app.use(globalErrorHandler)
 
 module.exports = app

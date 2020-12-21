@@ -3,159 +3,114 @@ const User = require('../models/userModel')
 const Coupon = require('../models/couponModel')
 const CouponType = require('../models/couponTypeModel')
 const APIFeatures = require('../utils/apiFeatures')
+const catchAsync = require('../utils/catchAsync')
+const AppError = require('../utils/appError')
 
 const USER_ACCESS = {
   FULL: 'full',
   DEFAULT: 'default'
 }
 
-exports.createTenant = async (req, res) => {
-  try {
-    await Tenant.create(req.body).then(async ({ _id, name }) => {
-      try {
-        await User.create({
-          tenantId: _id,
-          access: USER_ACCESS.FULL,
-          login: `${name.replace(/\s/g, '')}_login`,
-          password: `${name.replace(/\s/g, '')}_password`
-        }).then(() => res.status(200).json({ status: 'success' }))
-      } catch (err) {
-        res.status(400).json({
-          status: 'invalid',
-          message: err
-        })
-      }
-    })
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err
-    })
+exports.createTenant = catchAsync(async (req, res, next) => {
+  await Tenant.create(req.body).then(async ({ _id, name }) => {
+    try {
+      await User.create({
+        tenantId: _id,
+        access: USER_ACCESS.FULL,
+        login: `${name.replace(/\s/g, '')}_login`,
+        password: `${name.replace(/\s/g, '')}_password`
+      }).then(() => res.status(200).json({ status: 'success' }))
+    } catch (err) {
+      res.status(400).json({
+        status: 'invalid',
+        message: err
+      })
+    }
+  })
+})
+
+exports.getAllTenants = catchAsync(async (req, res, next) => {
+  const features = new APIFeatures(Tenant.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate()
+  const tenants = await features.query
+
+  res.json({
+    status: 'success',
+    result: tenants.length,
+    data: { tenants }
+  })
+})
+
+exports.getTenant = catchAsync(async (req, res, next) => {
+  const tenant = await Tenant.findById(req.params.tenantId)
+
+  if (!tenant) {
+    return next(new AppError('No tenant found with that id', 404))
   }
-}
 
-exports.getAllTenants = async (req, res) => {
-  try {
-    const features = new APIFeatures(Tenant.find(), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate()
-    const tenants = await features.query
+  res.json({
+    status: 'success',
+    data: { tenant }
+  })
+})
 
-    res.json({
-      status: 'success',
-      result: tenants.length,
-      data: { tenants }
-    })
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err,
-      data: null
-    })
+exports.updateTenant = catchAsync(async (req, res, next) => {
+  const tenant = await Tenant.findByIdAndUpdate(req.params.tenantId, req.body, {
+    new: true
+  })
+
+  if (!tenant) {
+    return next(new AppError('No tenant found with that id', 404))
   }
-}
 
-exports.getTenant = async (req, res) => {
-  try {
-    const tenant = await Tenant.findById(req.params.tenantId)
+  res.status(200).json({ status: 'success', data: { tenant } })
+})
 
-    res.json({
-      status: 'success',
-      data: { tenant }
-    })
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      data: null
-    })
+exports.deleteTenant = catchAsync(async (req, res, next) => {
+  const tenant = await Tenant.findByIdAndDelete(req.params.tenantId)
+
+  if (!tenant) {
+    return next(new AppError('No tenant found with that id', 404))
   }
-}
 
-exports.updateTenant = async (req, res) => {
-  try {
-    const tenant = await Tenant.findByIdAndUpdate(
-      req.params.tenantId,
-      req.body,
-      {
-        new: true
-      }
-    )
+  res.status(200).json({ status: 'success', data: { tenant } })
+})
 
-    res.status(200).json({ status: 'success', data: { tenant } })
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err
-    })
-  }
-}
+exports.getAllTenantUsers = catchAsync(async (req, res, next) => {
+  const users = await User.find({
+    tenantId: req.body.tenantId
+  })
 
-exports.deleteTenant = async (req, res) => {
-  try {
-    const tenant = await Tenant.findByIdAndDelete(req.params.tenantId)
+  res.json({
+    status: 'success',
+    result: users.length,
+    data: users
+  })
+})
 
-    res.status(200).json({ status: 'success', data: { tenant } })
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err
-    })
-  }
-}
+exports.getAllTenantCoupons = catchAsync(async (req, res, next) => {
+  const users = await Coupon.find({
+    tenantId: req.body.tenantId
+  })
 
-exports.getAllTenantUsers = async (req, res) => {
-  try {
-    const users = await User.find({
-      tenantId: req.body.tenantId
-    })
+  res.json({
+    status: 'success',
+    result: users.length,
+    data: users
+  })
+})
 
-    res.json({
-      status: 'success',
-      result: users.length,
-      data: users
-    })
-  } catch (error) {
-    res.status(404).json({
-      status: 'fail',
-      error
-    })
-  }
-}
-exports.getAllTenantCoupons = async (req, res) => {
-  try {
-    const users = await Coupon.find({
-      tenantId: req.body.tenantId
-    })
+exports.getAllTenantCouponsTypes = catchAsync(async (req, res, next) => {
+  const users = await CouponType.find({
+    tenantId: req.body.tenantId
+  })
 
-    res.json({
-      status: 'success',
-      result: users.length,
-      data: users
-    })
-  } catch (error) {
-    res.status(404).json({
-      status: 'fail',
-      error
-    })
-  }
-}
-exports.getAllTenantCouponsTypes = async (req, res) => {
-  try {
-    const users = await CouponType.find({
-      tenantId: req.body.tenantId
-    })
-
-    res.json({
-      status: 'success',
-      result: users.length,
-      data: users
-    })
-  } catch (error) {
-    res.status(404).json({
-      status: 'fail',
-      error
-    })
-  }
-}
+  res.json({
+    status: 'success',
+    result: users.length,
+    data: users
+  })
+})
