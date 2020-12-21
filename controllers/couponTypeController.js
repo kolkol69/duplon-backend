@@ -1,88 +1,58 @@
 const CouponType = require('../models/couponTypeModel')
+const catchAsync = require('../utils/catchAsync')
+const AppError = require('../utils/appError')
 
-exports.createCouponType = async (req, res) => {
-  try {
-    await CouponType.create({
-      ...req.body
-    }).then((response) =>
-      res.status(200).json({ status: 'success', data: { response } })
-    )
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err
-    })
-  }
-}
+exports.createCouponType = catchAsync(async (req, res, next) => {
+  await CouponType.create({
+    ...req.body
+  }).then((response) =>
+    res.status(200).json({ status: 'success', data: { response } })
+  )
+})
 
-exports.getAllCouponTypes = async (_, res) => {
-  try {
-    const couponTypes = await CouponType.find()
+exports.getAllCouponTypes = catchAsync(async (_, res, next) => {
+  const couponTypes = await CouponType.find()
 
-    return res.json({
-      status: 'success',
-      result: couponTypes.length,
-      data: couponTypes
-    })
-  } catch (error) {
-    res.status(404).json({
-      status: 'fail',
-      error
-    })
-  }
-  res.status(204).json({
+  return res.json({
     status: 'success',
-    data: null
+    result: couponTypes.length,
+    data: couponTypes
   })
-}
+})
 
-exports.getCouponType = async (req, res) => {
-  try {
-    const couponType = await CouponType.findById(req.params.couponTypeId)
+exports.getCouponType = catchAsync(async (req, res, next) => {
+  const couponType = await CouponType.findById(req.params.couponTypeId)
 
-    res.json({
-      status: 'success',
-      data: { couponType }
-    })
-  } catch (error) {
-    res.status(404).json({
-      status: 'fail',
-      data: null,
-      error
-    })
+  if (!couponType) {
+    return new AppError('No coupon type found with that id')
   }
-}
 
-exports.updateCouponType = async (req, res) => {
-  try {
-    const couponType = await CouponType.findByIdAndUpdate(
-      req.params.couponTypeId,
-      req.body,
-      {
-        new: true
-      }
-    )
+  res.json({
+    status: 'success',
+    data: { couponType }
+  })
+})
 
-    res.status(200).json({ status: 'success', data: { couponType } })
-  } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      error
-    })
+exports.updateCouponType = catchAsync(async (req, res, next) => {
+  const couponType = await CouponType.findByIdAndUpdate(
+    req.params.couponTypeId,
+    req.body,
+    {
+      new: true
+    }
+  )
+
+  if (!couponType) {
+    return new AppError('No coupon type found with that id')
   }
-}
+  res.status(200).json({ status: 'success', data: { couponType } })
+})
 
-exports.deleteCouponType = async (req, res) => {
-  try {
-    const couponType = await CouponType.findByIdAndDelete(
-      req.params.couponTypeId
-    )
+exports.deleteCouponType = catchAsync(async (req, res, next) => {
+  const couponType = await CouponType.findByIdAndDelete(req.params.couponTypeId)
 
-    res.status(200).json({ status: 'success', data: { couponType } })
-  } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      error
-    })
+  if (!couponType) {
+    return new AppError('No coupon type found with that id')
   }
-}
+  res.status(200).json({ status: 'success', data: { couponType } })
+})

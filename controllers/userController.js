@@ -1,101 +1,54 @@
 const User = require('../models/userModel')
+const catchAsync = require('../utils/catchAsync')
+const AppError = require('../utils/appError')
 
-exports.createUser = async (req, res) => {
-  try {
-    await User.create({
-      ...req.body
-    }).then((response) =>
-      res.status(200).json({ status: 'success', data: { response } })
-    )
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err
-    })
-  }
-}
+exports.createUser = catchAsync(async (req, res, next) => {
+  await User.create({
+    ...req.body
+  }).then((response) =>
+    res.status(200).json({ status: 'success', data: { response } })
+  )
+})
 
-exports.getAllUsers = async (_, res) => {
-  try {
-    const users = await User.find()
+exports.getAllUsers = catchAsync(async (_, res, next) => {
+  const users = await User.find()
 
-    return res.json({
-      status: 'success',
-      result: users.length,
-      data: users
-    })
-  } catch (error) {
-    res.status(404).json({
-      status: 'fail',
-      error
-    })
-  }
-  res.status(204).json({
+  return res.json({
     status: 'success',
-    data: null
+    result: users.length,
+    data: users
   })
-}
+})
 
-// exports.getAllTenantUsers = async (req, res) => {
-//   try {
-//     const users = await User.find({
-//       tenantId: req.params.tenantId
-//     })
+exports.getUser = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.params.userId)
 
-//     res.json({
-//       status: 'success',
-//       result: users.length,
-//       data: users
-//     })
-//   } catch (error) {
-//     res.status(404).json({
-//       status: 'fail',
-//       error
-//     })
-//   }
-// }
-
-exports.getUser = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.userId)
-
-    res.json({
-      status: 'success',
-      data: { user }
-    })
-  } catch (error) {
-    res.status(404).json({
-      status: 'fail',
-      data: null,
-      error
-    })
+  if (!user) {
+    return new AppError('No user found with that id')
   }
-}
 
-exports.updateUser = async (req, res) => {
-  try {
-    const user = await User.findByIdAndUpdate(req.params.userId, req.body, {
-      new: true
-    })
+  res.json({
+    status: 'success',
+    data: { user }
+  })
+})
 
-    res.status(200).json({ status: 'success', data: { user } })
-  } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      error
-    })
+exports.updateUser = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(req.params.userId, req.body, {
+    new: true
+  })
+
+  if (!user) {
+    return new AppError('No user found with that id')
   }
-}
+  res.status(200).json({ status: 'success', data: { user } })
+})
 
-exports.deleteUser = async (req, res) => {
-  try {
-    const user = await User.findByIdAndDelete(req.params.userId)
+exports.deleteUser = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndDelete(req.params.userId)
 
-    res.status(200).json({ status: 'success', data: { user } })
-  } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      error
-    })
+  if (!user) {
+    return new AppError('No user found with that id')
   }
-}
+  res.status(200).json({ status: 'success', data: { user } })
+})
