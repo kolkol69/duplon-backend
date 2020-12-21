@@ -2,7 +2,7 @@ const CouponType = require('../models/couponTypeModel')
 const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/appError')
 
-exports.createCouponType = catchAsync(async (req, res, next) => {
+exports.createCouponType = catchAsync(async (req, res, _next) => {
   await CouponType.create({
     ...req.body
   }).then((response) =>
@@ -10,7 +10,7 @@ exports.createCouponType = catchAsync(async (req, res, next) => {
   )
 })
 
-exports.getAllCouponTypes = catchAsync(async (_, res, next) => {
+exports.getAllCouponTypes = catchAsync(async (_, res, _next) => {
   const couponTypes = await CouponType.find()
 
   return res.json({
@@ -20,7 +20,7 @@ exports.getAllCouponTypes = catchAsync(async (_, res, next) => {
   })
 })
 
-exports.getCouponType = catchAsync(async (req, res, next) => {
+exports.getCouponType = catchAsync(async (req, res, _next) => {
   const couponType = await CouponType.findById(req.params.couponTypeId)
 
   if (!couponType) {
@@ -33,7 +33,7 @@ exports.getCouponType = catchAsync(async (req, res, next) => {
   })
 })
 
-exports.updateCouponType = catchAsync(async (req, res, next) => {
+exports.updateCouponType = catchAsync(async (req, res, _next) => {
   const couponType = await CouponType.findByIdAndUpdate(
     req.params.couponTypeId,
     req.body,
@@ -48,7 +48,7 @@ exports.updateCouponType = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: 'success', data: { couponType } })
 })
 
-exports.deleteCouponType = catchAsync(async (req, res, next) => {
+exports.deleteCouponType = catchAsync(async (req, res, _next) => {
   const couponType = await CouponType.findByIdAndDelete(req.params.couponTypeId)
 
   if (!couponType) {

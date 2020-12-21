@@ -11,7 +11,7 @@ const COUPON_STATUSES = {
   issued: 'issued'
 }
 
-exports.deleteAllCoupons = catchAsync(async (req, res, next) => {
+exports.deleteAllCoupons = catchAsync(async (_req, res, _next) => {
   Coupon.deleteMany({}, (response) => {
     res.status(200).json({
       status: 'success',
@@ -20,7 +20,7 @@ exports.deleteAllCoupons = catchAsync(async (req, res, next) => {
   })
 })
 
-exports.getQrCode = catchAsync(async (req, res, next) => {
+exports.getQrCode = catchAsync(async (_req, res, _next) => {
   QRCode.toDataURL(apiUrl, (err, url) => {
     if (err) {
       res.status(400).json({
@@ -35,7 +35,7 @@ exports.getQrCode = catchAsync(async (req, res, next) => {
   })
 })
 
-exports.redeemCoupon = catchAsync(async (req, res, next) => {
+exports.redeemCoupon = catchAsync(async (req, res, _next) => {
   const { userId, couponId } = req.query
 
   const history = {
@@ -57,7 +57,7 @@ exports.redeemCoupon = catchAsync(async (req, res, next) => {
   })
 })
 
-exports.issueCoupon = catchAsync(async (req, res, next) => {
+exports.issueCoupon = catchAsync(async (req, res, _next) => {
   await Coupon.create({
     ...req.body
   }).then((coupon) => {
@@ -79,7 +79,7 @@ exports.issueCoupon = catchAsync(async (req, res, next) => {
   })
 })
 
-exports.getAllCoupons = catchAsync(async (_, res, next) => {
+exports.getAllCoupons = catchAsync(async (_, res, _next) => {
   const coupons = await Coupon.find()
 
   return res.json({
@@ -89,7 +89,7 @@ exports.getAllCoupons = catchAsync(async (_, res, next) => {
   })
 })
 
-exports.getCoupon = catchAsync(async (req, res, next) => {
+exports.getCoupon = catchAsync(async (req, res, _next) => {
   const coupon = await Coupon.findById(req.params.couponId)
 
   res.json({
@@ -98,7 +98,7 @@ exports.getCoupon = catchAsync(async (req, res, next) => {
   })
 })
 
-exports.updateCoupon = catchAsync(async (req, res, next) => {
+exports.updateCoupon = catchAsync(async (req, res, _next) => {
   const { history, ...requestBody } = req.body
 
   if (history) {
@@ -124,7 +124,7 @@ exports.updateCoupon = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: 'success', data: coupon })
 })
 
-exports.deleteCoupon = catchAsync(async (req, res, next) => {
+exports.deleteCoupon = catchAsync(async (req, res, _next) => {
   const coupon = await Coupon.findByIdAndDelete(req.params.couponId)
 
   if (!coupon) {

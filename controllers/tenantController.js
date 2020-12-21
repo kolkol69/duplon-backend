@@ -11,7 +11,7 @@ const USER_ACCESS = {
   DEFAULT: 'default'
 }
 
-exports.createTenant = catchAsync(async (req, res, next) => {
+exports.createTenant = catchAsync(async (req, res, _next) => {
   await Tenant.create(req.body).then(async ({ _id, name }) => {
     try {
       await User.create({
@@ -29,7 +29,7 @@ exports.createTenant = catchAsync(async (req, res, next) => {
   })
 })
 
-exports.getAllTenants = catchAsync(async (req, res, next) => {
+exports.getAllTenants = catchAsync(async (req, res, _next) => {
   const features = new APIFeatures(Tenant.find(), req.query)
     .filter()
     .sort()
@@ -79,7 +79,7 @@ exports.deleteTenant = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: 'success', data: { tenant } })
 })
 
-exports.getAllTenantUsers = catchAsync(async (req, res, next) => {
+exports.getAllTenantUsers = catchAsync(async (req, res, _next) => {
   const users = await User.find({
     tenantId: req.body.tenantId
   })
@@ -91,7 +91,7 @@ exports.getAllTenantUsers = catchAsync(async (req, res, next) => {
   })
 })
 
-exports.getAllTenantCoupons = catchAsync(async (req, res, next) => {
+exports.getAllTenantCoupons = catchAsync(async (req, res, _next) => {
   const users = await Coupon.find({
     tenantId: req.body.tenantId
   })
@@ -103,7 +103,7 @@ exports.getAllTenantCoupons = catchAsync(async (req, res, next) => {
   })
 })
 
-exports.getAllTenantCouponsTypes = catchAsync(async (req, res, next) => {
+exports.getAllTenantCouponsTypes = catchAsync(async (req, res, _next) => {
   const users = await CouponType.find({
     tenantId: req.body.tenantId
   })

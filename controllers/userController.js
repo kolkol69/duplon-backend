@@ -2,7 +2,7 @@ const User = require('../models/userModel')
 const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/appError')
 
-exports.createUser = catchAsync(async (req, res, next) => {
+exports.createUser = catchAsync(async (req, res, _next) => {
   await User.create({
     ...req.body
   }).then((response) =>
@@ -10,7 +10,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
   )
 })
 
-exports.getAllUsers = catchAsync(async (_, res, next) => {
+exports.getAllUsers = catchAsync(async (_req, res, _next) => {
   const users = await User.find()
 
   return res.json({
@@ -20,7 +20,7 @@ exports.getAllUsers = catchAsync(async (_, res, next) => {
   })
 })
 
-exports.getUser = catchAsync(async (req, res, next) => {
+exports.getUser = catchAsync(async (req, res, _next) => {
   const user = await User.findById(req.params.userId)
 
   if (!user) {
@@ -33,7 +33,7 @@ exports.getUser = catchAsync(async (req, res, next) => {
   })
 })
 
-exports.updateUser = catchAsync(async (req, res, next) => {
+exports.updateUser = catchAsync(async (req, res, _next) => {
   const user = await User.findByIdAndUpdate(req.params.userId, req.body, {
     new: true
   })
@@ -44,7 +44,7 @@ exports.updateUser = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: 'success', data: { user } })
 })
 
-exports.deleteUser = catchAsync(async (req, res, next) => {
+exports.deleteUser = catchAsync(async (req, res, _next) => {
   const user = await User.findByIdAndDelete(req.params.userId)
 
   if (!user) {

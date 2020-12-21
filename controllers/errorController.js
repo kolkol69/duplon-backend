@@ -43,7 +43,7 @@ const handleDublicateFieldsDB = (err) => {
   return new AppError(message, 400)
 }
 
-module.exports = (err, req, res, next) => {
+module.exports = (err, req, res, _next) => {
   err.statusCode = err.statusCode || 500
   err.status = err.status || 'error'
 
