@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon server.js",
+    "debug": "ndb server.js",
     "lint": "eslint . --fix"
   },
   "dependencies": {
@@ -19,6 +20,7 @@
     "mongodb": "^3.5.8",
     "mongoose": "^5.9.16",
     "morgan": "^1.10.0",
+    "ndb": "^1.1.5",
     "nodemailer": "^6.4.10",
     "nodemon": "^2.0.4",
     "password-generator": "^2.2.3",
