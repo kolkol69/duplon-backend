@@ -37,21 +37,25 @@ app.use(express.static(path.join(__dirname, 'public')))
 // show BE readme
 require('express-readme')(app, {
   filename: 'readme.md',
-  routes: ['/', '/readme']
+  routes: ['/readme']
 })
 
 app.use('/send-email', emailRouter)
+
 app.use('/api/v1/users', userRouter)
 app.use('/api/v1/tenants', tenantRouter)
 app.use('/api/v1/coupons/type', couponTypeRouter)
 app.use('/api/v1/coupons', couponRouter)
-app.use('/api', (req, res) => {
+app.use('/api/postman', (req, res) => {
   res.redirect(process.env.API_DOCUMENTATION)
 })
 
-// catch 404 and forward to error handler
-app.use('*', (req, res, next) => {
-  next(createError(404))
+// catch 404
+app.all('*', (req, res) => {
+  res.status(404).send({
+    status: 'fail',
+    message: `Can't find ${req.originalUrl} on this server!`
+  })
 })
 
 module.exports = app
