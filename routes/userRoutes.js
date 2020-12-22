@@ -22,6 +22,6 @@ router
   .route('/:userId')
   .get(getUser)
   .patch(updateUser)
-  .delete(protect, restrictTo, deleteUser)
+  .delete(protect, restrictTo('admin'), deleteUser)
 
 module.exports = router
