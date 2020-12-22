@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const validator = require('validator')
+const bcrypt = require('bcryptjs')
 
 const { Schema, SchemaTypes } = mongoose
 const { ObjectId } = SchemaTypes
@@ -13,10 +15,33 @@ const userSchema = new Schema({
   email: {
     type: String,
     required: [true, 'Please provide an email address'],
-    unique: true
+    unique: true,
+    lowercase: true,
+    validate: [validator.isEmail, 'Please provide a valid email address']
   },
-  password: { type: String, require: true }
+  password: { type: String, require: true, minlength: 4 },
+  passwordConfirm: {
+    type: String,
+    required: [true, 'Please confirm your password'],
+    validate: {
+      validator(el) {
+        return el === this.password
+      },
+      message: 'Passwords are not the same!'
+    }
+  }
 })
+
+userSchema.pre('save', async function onSave(next) {
+  if (!this.isModified('password')) {
+    return next()
+  }
+
+  this.password = await bcrypt.hash(this.password, 10)
+  this.passwordConfirm = undefined
+  next()
+})
+
 const User = mongoose.model('User', userSchema)
 
 module.exports = User

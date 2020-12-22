@@ -3,11 +3,11 @@ const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/appError')
 
 exports.createUser = catchAsync(async (req, res, _next) => {
-  await User.create({
+  const newUser = await User.create({
     ...req.body
-  }).then((response) =>
-    res.status(200).json({ status: 'success', data: { response } })
-  )
+  })
+
+  res.status(201).json({ status: 'success', data: { user: newUser } })
 })
 
 exports.getAllUsers = catchAsync(async (_req, res, _next) => {
