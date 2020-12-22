@@ -7,7 +7,11 @@ const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, now.getDay())
 
 const statusHistorySchema = new Schema({
   userId: { type: ObjectId, required: true },
-  status: { type: String, required: true }, // OneOf([issued, expired, redeemed])
+  status: {
+    type: String,
+    required: true,
+    enum: ['issued', 'expired', 'redeemed']
+  },
   changeDate: { type: Date, default: Date.now() }
 })
 
