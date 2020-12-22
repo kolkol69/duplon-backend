@@ -22,7 +22,8 @@ exports.signup = catchAsync(async (req, res, _next) => {
     login: req.body.login,
     email: req.body.email,
     password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm
+    passwordConfirm: req.body.passwordConfirm,
+    passwordChangedAt: req.body.passwordChangedAt
   })
 
   const token = jwt.sign(
@@ -76,22 +77,35 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
   ) {
-    token = req.headers.authorization.split(' ')[1]
+    ;[, token] = req.headers.authorization.split(' ')
   }
 
   if (!token) {
     return next(
-      new AppError('You are not logged in. Please log in to ger access.')
+      new AppError('You are not logged in. Please log in to ger access.', 401)
     )
   }
 
   // 2) Validate token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
 
-  console.log('decoded', decoded)
   // 3) Check if user still exists
+  const user = await User.findById(decoded.id)
+
+  if (!user) {
+    return next(
+      new AppError('The user belonging to this token does no longer exist', 401)
+    )
+  }
 
   // 4) Check if user changed password after the token was issued
+  if (user.changedPasswordAfter(decoded.iat)) {
+    return next(
+      new AppError('User changed password recently! Please log in again.', 401)
+    )
+  }
 
+  // GRANTING ACCESS TO PROTECTED ROUTER
+  req.user = user
   next()
 })

@@ -38,7 +38,7 @@ app.use((req, res, next) => {
 // show BE readme
 require('express-readme')(app, {
   filename: 'readme.md',
-  routes: ['/readme']
+  routes: ['/', '/readme']
 })
 
 app.use('/send-email', emailRouter)
