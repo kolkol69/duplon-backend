@@ -19,7 +19,12 @@ const userSchema = new Schema({
     lowercase: true,
     validate: [validator.isEmail, 'Please provide a valid email address']
   },
-  password: { type: String, require: true, minlength: 4 },
+  password: {
+    type: String,
+    require: true,
+    minlength: 4,
+    select: false
+  },
   passwordConfirm: {
     type: String,
     required: [true, 'Please confirm your password'],
@@ -41,6 +46,13 @@ userSchema.pre('save', async function onSave(next) {
   this.passwordConfirm = undefined
   next()
 })
+
+userSchema.methods.correctPassword = function checkPassword(
+  candidatePassword,
+  userPassword
+) {
+  return bcrypt.compare(candidatePassword, userPassword)
+}
 
 const User = mongoose.model('User', userSchema)
 
