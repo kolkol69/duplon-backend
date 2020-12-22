@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const { promisify } = require('util')
 const User = require('../models/userModel')
 const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/appError')
@@ -55,7 +56,6 @@ exports.login = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ login }).select('+password')
   const correct = user && (await user.correctPassword(password, user.password))
 
-  console.log('correct', correct)
   if (!user || !correct) {
     return next(new AppError('Incorrect login or password', 401))
   }
@@ -66,4 +66,32 @@ exports.login = catchAsync(async (req, res, next) => {
     status: 'success',
     token
   })
+})
+
+exports.protect = catchAsync(async (req, res, next) => {
+  // 1) Getting token and check if its there
+  let token = ''
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1]
+  }
+
+  if (!token) {
+    return next(
+      new AppError('You are not logged in. Please log in to ger access.')
+    )
+  }
+
+  // 2) Validate token
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
+
+  console.log('decoded', decoded)
+  // 3) Check if user still exists
+
+  // 4) Check if user changed password after the token was issued
+
+  next()
 })

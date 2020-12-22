@@ -43,6 +43,9 @@ const handleDublicateFieldsDB = (err) => {
   return new AppError(message, 400)
 }
 
+const handleJWTError = () =>
+  new AppError('Invalid token. Please log in again.', 401)
+
 module.exports = (err, req, res, _next) => {
   err.statusCode = err.statusCode || 500
   err.status = err.status || 'error'
@@ -57,6 +60,12 @@ module.exports = (err, req, res, _next) => {
     }
     if (err.code === 11000) {
       error = handleDublicateFieldsDB(error)
+    }
+    if (err.name === 'JsonWebTokenError') {
+      error = handleJWTError()
+    }
+    if (err.name === 'TokenExpiredError') {
+      error = handleJWTError()
     }
     sendErrorProd(error, res)
   }

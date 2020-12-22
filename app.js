@@ -17,10 +17,6 @@ require('./db/mongoose')
 
 const app = express()
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'jade')
-
 app.use(cors())
 app.use(bodyParser.json()) // to support JSON-encoded bodies
 app.use(
@@ -34,6 +30,10 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString()
+  next()
+})
 
 // show BE readme
 require('express-readme')(app, {
