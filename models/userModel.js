@@ -6,7 +6,11 @@ const { Schema, SchemaTypes } = mongoose
 const { ObjectId } = SchemaTypes
 const userSchema = new Schema({
   tenantId: { type: ObjectId, required: true },
-  access: { type: String, default: 'default' }, // OneOf[default, admin]
+  role: {
+    type: String,
+    enum: ['user', 'head', 'admin'],
+    default: 'user'
+  },
   login: {
     type: String,
     required: [true, 'Please provide a valid login'],
