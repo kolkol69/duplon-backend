@@ -4,10 +4,20 @@ const router = express.Router()
 const userController = require('../controllers/userController')
 const authController = require('../controllers/authController')
 
-const { signup, login, protect, restrictTo } = authController
+const {
+  login,
+  signup,
+  protect,
+  restrictTo,
+  resetPassword,
+  forgotPassword
+} = authController
 
-router.post('/signup', signup)
 router.post('/login', login)
+router.post('/signup', signup)
+
+router.patch('/resetPassword/:token', resetPassword)
+router.post('/forgotPassword', forgotPassword)
 
 const {
   getAllUsers,
