@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const { promisify } = require('util')
 const User = require('../models/userModel')
+const Tenant = require('../models/tenantModel')
 const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/appError')
 const sendEmail = require('../utils/email')
@@ -43,9 +44,11 @@ const createSendToken = (user, statusCode, res) => {
 }
 
 exports.signup = catchAsync(async (req, res, _next) => {
+  const newTenant = await Tenant.create({
+    name: req.body.tenantName
+  })
   const newUser = await User.create({
-    tenantId: req.body.tenantId,
-    tenant: req.body.tenant,
+    tenant: newTenant._id,
     login: req.body.login,
     email: req.body.email,
     password: req.body.password,
@@ -119,11 +122,11 @@ exports.protect = catchAsync(async (req, res, next) => {
 })
 
 exports.restrictTo = (...roles) => (req, res, next) => {
-  if (!roles.includes(req.user.role)) {
-    return next(
-      new AppError('You do not have permissions to perform this action', 403)
-    )
-  }
+  // if (!roles.includes(req.user.role)) {
+  //   return next(
+  //     new AppError('You do not have permissions to perform this action', 403)
+  //   )
+  // }
 
   next()
 }

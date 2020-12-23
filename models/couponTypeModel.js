@@ -16,13 +16,20 @@ const couponTypeSchema = new Schema(
       min: [0, 'Discount cant be less than 0']
     },
     title: { type: String, required: true },
-    descr: { type: String, required: true }
+    descr: { type: String, required: true },
+    user: { type: ObjectId, ref: 'User' }
   },
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
   }
 )
+
+couponTypeSchema.pre(/^find/, function populate(next) {
+  this.populate('tenant')
+  next()
+})
+
 const CouponType = mongoose.model('CouponType', couponTypeSchema)
 
 module.exports = CouponType

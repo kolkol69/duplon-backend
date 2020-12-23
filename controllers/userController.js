@@ -1,6 +1,7 @@
 const User = require('../models/userModel')
 const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/appError')
+const factory = require('./handleFactory')
 
 const filterObj = (obj, ...fields) => {
   const newObj = {}
@@ -47,53 +48,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   })
 })
 
-exports.createUser = catchAsync(async (req, res, _next) => {
-  const newUser = await User.create({
-    ...req.body
-  })
-
-  res.status(201).json({ status: 'success', data: { user: newUser } })
-})
-
-exports.getAllUsers = catchAsync(async (_req, res, _next) => {
-  const users = await User.find()
-
-  return res.json({
-    status: 'success',
-    result: users.length,
-    data: users
-  })
-})
-
-exports.getUser = catchAsync(async (req, res, _next) => {
-  const user = await User.findById(req.params.userId)
-
-  if (!user) {
-    return new AppError('No user found with that id')
-  }
-
-  res.json({
-    status: 'success',
-    data: { user }
-  })
-})
-
-exports.updateUser = catchAsync(async (req, res, _next) => {
-  const user = await User.findByIdAndUpdate(req.params.userId, req.body, {
-    new: true
-  })
-
-  if (!user) {
-    return new AppError('No user found with that id')
-  }
-  res.status(200).json({ status: 'success', data: { user } })
-})
-
-exports.deleteUser = catchAsync(async (req, res, _next) => {
-  const user = await User.findByIdAndDelete(req.params.userId)
-
-  if (!user) {
-    return new AppError('No user found with that id')
-  }
-  res.status(200).json({ status: 'success', data: { user } })
-})
+exports.createUser = factory.createOne(User)
+exports.getAllUsers = factory.getAll(User)
+exports.getUser = factory.getOne(User)
+exports.updateUser = factory.updateOne(User)
+exports.deleteUser = factory.deleteOne(User)

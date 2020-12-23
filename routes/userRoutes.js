@@ -38,9 +38,9 @@ router.delete('/deleteMe', protect, deleteMe)
 router.route('/').get(getAllUsers).post(createUser)
 
 router
-  .route('/:userId')
-  .get(getUser)
-  .patch(updateUser)
+  .route('/:id')
+  .get(protect, restrictTo('head', 'admin'), getUser)
+  .patch(protect, restrictTo('head', 'admin'), updateUser)
   .delete(protect, restrictTo('admin'), deleteUser)
 
 module.exports = router

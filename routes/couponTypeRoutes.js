@@ -2,7 +2,9 @@ const express = require('express')
 
 const router = express.Router()
 const couponTypeController = require('../controllers/couponTypeController')
+const authController = require('../controllers/authController')
 
+const { protect, restrictTo } = authController
 const {
   getAllCouponTypes,
   createCouponType,
@@ -11,12 +13,15 @@ const {
   deleteCouponType
 } = couponTypeController
 
-router.route('/').get(getAllCouponTypes).post(createCouponType)
+router
+  .route('/')
+  .get(protect, getAllCouponTypes)
+  .post(protect, restrictTo('head', 'admin'), createCouponType)
 
 router
-  .route('/:couponTypeId')
-  .get(getCouponType)
-  .patch(updateCouponType)
-  .delete(deleteCouponType)
+  .route('/:id')
+  .get(protect, getCouponType)
+  .patch(protect, updateCouponType)
+  .delete(protect, restrictTo('head', 'admin'), deleteCouponType)
 
 module.exports = router
