@@ -28,10 +28,12 @@ const {
   getUser,
   updateUser,
   deleteUser,
-  updateMe
+  updateMe,
+  deleteMe
 } = userController
 
 router.patch('/updateMe', protect, updateMe)
+router.delete('/deleteMe', protect, deleteMe)
 
 router.route('/').get(getAllUsers).post(createUser)
 

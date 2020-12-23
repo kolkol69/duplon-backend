@@ -101,6 +101,12 @@ userSchema.pre('save', function updatePasswordChangeAt(next) {
   this.passwordChangedAt = Date.now() - 1000
   next()
 })
+
+userSchema.pre(/^find/, function hideInactiveUsers(next) {
+  this.find({ active: { $ne: false } })
+  next()
+})
+
 const User = mongoose.model('User', userSchema)
 
 module.exports = User
