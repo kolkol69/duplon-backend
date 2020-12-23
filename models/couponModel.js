@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
+const moment = require('moment')
 
 const { Schema, SchemaTypes } = mongoose
 const { ObjectId } = SchemaTypes
-const now = new Date()
-const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, now.getDay())
+const nextMonth = new Date(moment().add(1, 'month'))
 
 const statusHistorySchema = new Schema({
   userId: { type: ObjectId, required: true },
@@ -12,7 +12,7 @@ const statusHistorySchema = new Schema({
     required: true,
     enum: ['issued', 'expired', 'redeemed']
   },
-  changeDate: { type: Date, default: Date.now() }
+  changeDate: { type: Date, default: Date.now }
 })
 
 const couponSchema = new Schema({
@@ -21,7 +21,7 @@ const couponSchema = new Schema({
   history: [statusHistorySchema],
   url: String,
   expDate: { type: Date, default: nextMonth },
-  createdAt: { type: Date, default: Date.now() },
+  createdAt: { type: Date, default: Date.now },
   type: { type: ObjectId, ref: 'CouponType' }
 })
 
