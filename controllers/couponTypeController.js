@@ -21,7 +21,9 @@ exports.getAllCouponTypes = catchAsync(async (_, res, _next) => {
 })
 
 exports.getCouponType = catchAsync(async (req, res, _next) => {
-  const couponType = await CouponType.findById(req.params.couponTypeId)
+  const couponType = await CouponType.findById(
+    req.params.couponTypeId
+  ).populate('tenant')
 
   if (!couponType) {
     return new AppError('No coupon type found with that id')

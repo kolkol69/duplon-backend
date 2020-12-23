@@ -49,7 +49,7 @@ exports.redeemCoupon = catchAsync(async (req, res, _next) => {
   )
 
   if (!coupon) {
-    return new AppError('Coupon not found with that id')
+    return new AppError('Could not find coupon with that id')
   }
 
   res.status(200).json({
@@ -70,6 +70,9 @@ exports.issueCoupon = catchAsync(async (req, res, _next) => {
             error: err
           })
         }
+        // eslint-disable-next-line no-param-reassign
+        // coupon.url = url
+        // coupon.save()
         res.status(200).json({
           status: 'success',
           data: { coupon, url }
@@ -91,6 +94,8 @@ exports.getAllCoupons = catchAsync(async (_, res, _next) => {
 
 exports.getCoupon = catchAsync(async (req, res, _next) => {
   const coupon = await Coupon.findById(req.params.couponId)
+    .populate('type')
+    .populate('tenant')
 
   res.json({
     status: 'success',

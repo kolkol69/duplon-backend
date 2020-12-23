@@ -7,6 +7,7 @@ const { Schema, SchemaTypes } = mongoose
 const { ObjectId } = SchemaTypes
 const userSchema = new Schema({
   tenantId: { type: ObjectId, required: true },
+  tenant: { type: ObjectId, ref: 'Tenant' },
   role: {
     type: String,
     enum: ['user', 'head', 'admin'],

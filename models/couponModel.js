@@ -12,17 +12,28 @@ const statusHistorySchema = new Schema({
     required: true,
     enum: ['issued', 'expired', 'redeemed']
   },
-  changeDate: { type: Date, default: Date(Date.now()) }
+  changeDate: { type: Date, default: Date.now() }
 })
 
 const couponSchema = new Schema({
-  tenantId: { type: ObjectId, required: true },
+  tenant: { type: ObjectId, ref: 'Tenant' },
   PCId: { type: ObjectId, default: null }, // pairedCouponId
   history: [statusHistorySchema],
+  url: String,
   expDate: { type: Date, default: nextMonth },
-  createdAt: { type: Date, default: Date(Date.now()) },
-  typeId: { type: ObjectId, require: true }
+  createdAt: { type: Date, default: Date.now() },
+  type: { type: ObjectId, ref: 'CouponType' }
 })
+
+// Embeding couponType into coupon
+// couponSchema.pre('save', async function getCouponType(next) {
+//   const { typeId } = this.type
+//   const type = await CouponType.findById(typeId)
+
+//   this.type = type
+//   next()
+// })
+
 const Coupon = mongoose.model('Coupon', couponSchema)
 
 module.exports = Coupon

@@ -66,7 +66,7 @@ exports.getAllUsers = catchAsync(async (_req, res, _next) => {
 })
 
 exports.getUser = catchAsync(async (req, res, _next) => {
-  const user = await User.findById(req.params.userId)
+  const user = await User.findById(req.params.userId).populate('tenant')
 
   if (!user) {
     return new AppError('No user found with that id')
