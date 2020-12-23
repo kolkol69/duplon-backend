@@ -18,7 +18,7 @@ router.route('/').get(getAllCoupons).post(issueCoupon).delete(deleteAllCoupons)
 // redeem should use POST, but navigating thru
 // qr code url let us do only GET requests
 router.route('/redeem').get(redeemCoupon)
-router.route('/generate-qrcode').get(getQrCode)
+router.route('/generate-qrcode/:couponId').get(getQrCode)
 router
   .route('/:couponId')
   .get(getCoupon)

@@ -20,8 +20,10 @@ exports.deleteAllCoupons = catchAsync(async (_req, res, _next) => {
   })
 })
 
-exports.getQrCode = catchAsync(async (_req, res, _next) => {
-  QRCode.toDataURL(apiUrl, (err, url) => {
+exports.getQrCode = catchAsync(async (req, res, _next) => {
+  const coupon = await Coupon.findById(req.body.couponId)
+
+  QRCode.toDataURL(coupon.url, (err, url) => {
     if (err) {
       res.status(400).json({
         status: 'fail',
@@ -58,27 +60,27 @@ exports.redeemCoupon = catchAsync(async (req, res, _next) => {
 })
 
 exports.issueCoupon = catchAsync(async (req, res, _next) => {
-  await Coupon.create({
+  const coupon = await Coupon.create({
     ...req.body
-  }).then((coupon) => {
-    QRCode.toDataURL(
-      `${apiUrl}/coupons/redeem?userId=${req.body.history.userId}&couponId=${coupon._id}`,
-      (err, url) => {
-        if (err) {
-          res.status(400).json({
-            status: 'fail',
-            error: err
-          })
-        }
-        // eslint-disable-next-line no-param-reassign
-        // coupon.url = url
-        // coupon.save()
-        res.status(200).json({
-          status: 'success',
-          data: { coupon, url }
-        })
-      }
-    )
+  })
+
+  const url = `${apiUrl}/coupons/redeem?userId=${req.body.history.userId}&couponId=${coupon._id}`
+
+  QRCode.toDataURL(url, (err, qrCode) => {
+    if (err) {
+      res.status(400).json({
+        status: 'fail',
+        error: err
+      })
+    }
+
+    coupon.url = url
+    coupon.save()
+
+    res.status(200).json({
+      status: 'success',
+      data: { coupon, qrCode }
+    })
   })
 })
 
