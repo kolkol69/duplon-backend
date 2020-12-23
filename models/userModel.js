@@ -12,6 +12,7 @@ const userSchema = new Schema({
     enum: ['user', 'head', 'admin'],
     default: 'user'
   },
+  name: String,
   login: {
     type: String,
     required: [true, 'Please provide a valid login'],
@@ -42,7 +43,12 @@ const userSchema = new Schema({
   },
   passwordChangedAt: Date,
   passwordResetToken: String,
-  passwordResetExpires: Date
+  passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    default: true,
+    select: false
+  }
 })
 
 userSchema.pre('save', async function onSave(next) {

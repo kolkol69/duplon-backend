@@ -10,7 +10,8 @@ const {
   protect,
   restrictTo,
   resetPassword,
-  forgotPassword
+  forgotPassword,
+  updatePassword
 } = authController
 
 router.post('/login', login)
@@ -19,15 +20,21 @@ router.post('/signup', signup)
 router.patch('/resetPassword/:token', resetPassword)
 router.post('/forgotPassword', forgotPassword)
 
+router.patch('/updateMyPassword', protect, updatePassword)
+
 const {
   getAllUsers,
   createUser,
   getUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  updateMe
 } = userController
 
+router.patch('/updateMe', protect, updateMe)
+
 router.route('/').get(getAllUsers).post(createUser)
+
 router
   .route('/:userId')
   .get(getUser)
