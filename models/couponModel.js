@@ -17,12 +17,21 @@ const statusHistorySchema = new Schema({
 
 const couponSchema = new Schema({
   tenant: { type: ObjectId, ref: 'Tenant' },
-  PCId: { type: ObjectId, default: null }, // pairedCouponId
+  PCId: { type: ObjectId, ref: 'Coupon', default: null }, // pairedCouponId
   history: [statusHistorySchema],
   url: String,
   expDate: { type: Date, default: nextMonth },
   createdAt: { type: Date, default: Date.now() },
   type: { type: ObjectId, ref: 'CouponType' }
+})
+
+// Adding populate to all queries
+couponSchema.pre(/^find/, function populate(next) {
+  this.populate({
+    path: 'tenant type',
+    select: '-__v'
+  })
+  next()
 })
 
 // Embeding couponType into coupon

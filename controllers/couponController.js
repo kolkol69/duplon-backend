@@ -96,8 +96,6 @@ exports.getAllCoupons = catchAsync(async (_, res, _next) => {
 
 exports.getCoupon = catchAsync(async (req, res, _next) => {
   const coupon = await Coupon.findById(req.params.couponId)
-    .populate('type')
-    .populate('tenant')
 
   res.json({
     status: 'success',

@@ -6,8 +6,7 @@ const crypto = require('crypto')
 const { Schema, SchemaTypes } = mongoose
 const { ObjectId } = SchemaTypes
 const userSchema = new Schema({
-  tenantId: { type: ObjectId, required: true },
-  tenant: { type: ObjectId, ref: 'Tenant' },
+  tenant: { type: ObjectId, ref: 'Tenant', required: true },
   role: {
     type: String,
     enum: ['user', 'head', 'admin'],
@@ -100,6 +99,14 @@ userSchema.pre('save', function updatePasswordChangeAt(next) {
   }
 
   this.passwordChangedAt = Date.now() - 1000
+  next()
+})
+
+userSchema.pre(/^find/, function populate(next) {
+  this.populate({
+    path: 'tenant',
+    select: '-__v'
+  })
   next()
 })
 
