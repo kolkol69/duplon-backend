@@ -5,25 +5,37 @@ const { Schema, SchemaTypes } = mongoose
 const { ObjectId } = SchemaTypes
 const nextMonth = new Date(moment().add(1, 'month'))
 
-const statusHistorySchema = new Schema({
-  userId: { type: ObjectId, required: true },
-  status: {
-    type: String,
-    required: true,
-    enum: ['issued', 'expired', 'redeemed']
+const statusHistorySchema = new Schema(
+  {
+    userId: { type: ObjectId, required: true },
+    status: {
+      type: String,
+      required: true,
+      enum: ['issued', 'expired', 'redeemed']
+    },
+    changeDate: { type: Date, default: Date.now }
   },
-  changeDate: { type: Date, default: Date.now }
-})
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  }
+)
 
-const couponSchema = new Schema({
-  tenant: { type: ObjectId, ref: 'Tenant' },
-  PCId: { type: ObjectId, ref: 'Coupon', default: null }, // pairedCouponId
-  history: [statusHistorySchema],
-  url: String,
-  expDate: { type: Date, default: nextMonth },
-  createdAt: { type: Date, default: Date.now },
-  type: { type: ObjectId, ref: 'CouponType' }
-})
+const couponSchema = new Schema(
+  {
+    tenant: { type: ObjectId, ref: 'Tenant' },
+    PCId: { type: ObjectId, ref: 'Coupon', default: null }, // pairedCouponId
+    history: [statusHistorySchema],
+    url: String,
+    expDate: { type: Date, default: nextMonth },
+    createdAt: { type: Date, default: Date.now },
+    type: { type: ObjectId, ref: 'CouponType' }
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  }
+)
 
 // Adding populate to all queries
 couponSchema.pre(/^find/, function populate(next) {
