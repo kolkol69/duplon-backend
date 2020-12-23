@@ -1,9 +1,7 @@
 const CouponType = require('../models/couponTypeModel')
 const factory = require('./handleFactory')
-const catchAsync = require('../utils/catchAsync')
 
-exports.createCouponType = catchAsync(async (req, res, _next) => {
-  // Allow nested routes
+exports.setUserTenantIds = (req, _res, next) => {
   if (!req.body.tenant) {
     req.body.tenant = req.params.tenantId
   }
@@ -11,12 +9,10 @@ exports.createCouponType = catchAsync(async (req, res, _next) => {
     req.body.user = req.user.id
   }
 
-  const newDoc = await CouponType.create({
-    ...req.body
-  })
+  next()
+}
 
-  res.status(201).json({ status: 'success', data: { data: newDoc } })
-})
+exports.createCouponType = factory.createOne(CouponType)
 exports.getAllCouponTypes = factory.getAll(CouponType)
 exports.getCouponType = factory.getOne(CouponType)
 exports.updateCouponType = factory.updateOne(CouponType)

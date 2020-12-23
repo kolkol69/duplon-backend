@@ -83,9 +83,7 @@ exports.getAll = (Model) =>
 
 exports.createOne = (Model) =>
   catchAsync(async (req, res, _next) => {
-    const newDoc = await Model.create({
-      ...req.body
-    })
+    const newDoc = await Model.create(req.body)
 
     res.status(201).json({ status: 'success', data: { data: newDoc } })
   })

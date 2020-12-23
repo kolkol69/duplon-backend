@@ -52,9 +52,7 @@ exports.redeemCoupon = catchAsync(async (req, res, _next) => {
 })
 
 exports.issueCoupon = catchAsync(async (req, res, _next) => {
-  const coupon = await Coupon.create({
-    ...req.body
-  })
+  const coupon = await Coupon.create(req.body)
 
   const url = `${apiUrl}/coupons/redeem?userId=${req.body.history.userId}&couponId=${coupon._id}`
 

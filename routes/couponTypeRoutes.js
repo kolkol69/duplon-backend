@@ -10,13 +10,19 @@ const {
   createCouponType,
   getCouponType,
   updateCouponType,
-  deleteCouponType
+  deleteCouponType,
+  setUserTenantIds
 } = couponTypeController
 
 router
   .route('/')
   .get(protect, getAllCouponTypes)
-  .post(protect, restrictTo('head', 'admin'), createCouponType)
+  .post(
+    protect,
+    restrictTo('head', 'admin'),
+    setUserTenantIds,
+    createCouponType
+  )
 
 router
   .route('/:id')
