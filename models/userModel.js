@@ -5,51 +5,57 @@ const crypto = require('crypto')
 
 const { Schema, SchemaTypes } = mongoose
 const { ObjectId } = SchemaTypes
-const userSchema = new Schema({
-  tenant: { type: ObjectId, ref: 'Tenant', required: true },
-  role: {
-    type: String,
-    enum: ['user', 'head', 'admin'],
-    default: 'user'
-  },
-  name: String,
-  login: {
-    type: String,
-    required: [true, 'Please provide a valid login'],
-    unique: true
-  },
-  email: {
-    type: String,
-    required: [true, 'Please provide an email address'],
-    unique: true,
-    lowercase: true,
-    validate: [validator.isEmail, 'Please provide a valid email address']
-  },
-  password: {
-    type: String,
-    require: true,
-    minlength: 4,
-    select: false
-  },
-  passwordConfirm: {
-    type: String,
-    required: [true, 'Please confirm your password'],
-    validate: {
-      validator(el) {
-        return el === this.password
-      },
-      message: 'Passwords are not the same!'
+const userSchema = new Schema(
+  {
+    tenant: { type: ObjectId, ref: 'Tenant', required: true },
+    role: {
+      type: String,
+      enum: ['user', 'head', 'admin'],
+      default: 'user'
+    },
+    name: String,
+    login: {
+      type: String,
+      required: [true, 'Please provide a valid login'],
+      unique: true
+    },
+    email: {
+      type: String,
+      required: [true, 'Please provide an email address'],
+      unique: true,
+      lowercase: true,
+      validate: [validator.isEmail, 'Please provide a valid email address']
+    },
+    password: {
+      type: String,
+      require: true,
+      minlength: 4,
+      select: false
+    },
+    passwordConfirm: {
+      type: String,
+      required: [true, 'Please confirm your password'],
+      validate: {
+        validator(el) {
+          return el === this.password
+        },
+        message: 'Passwords are not the same!'
+      }
+    },
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetExpires: Date,
+    active: {
+      type: Boolean,
+      default: true,
+      select: false
     }
   },
-  passwordChangedAt: Date,
-  passwordResetToken: String,
-  passwordResetExpires: Date,
-  active: {
-    type: Boolean,
-    default: true,
-    select: false
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
   }
-})
+)
 
 userSchema.pre('save', async function onSave(next) {
   if (!this.isModified('password')) {
