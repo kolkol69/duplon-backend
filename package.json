@@ -21,6 +21,7 @@
     "express-rate-limit": "^5.2.3",
     "express-readme": "^0.0.5",
     "helmet": "^4.2.0",
+    "hpp": "^0.2.3",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "jsonwebtoken": "^8.5.1",

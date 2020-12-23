@@ -7,6 +7,7 @@ const rateLimit = require('express-rate-limit')
 const mongoSanitize = require('express-mongo-sanitize')
 const xss = require('xss-clean')
 const helmet = require('helmet')
+const hpp = require('hpp')
 const path = require('path')
 
 const AppError = require('./utils/appError')
@@ -61,6 +62,13 @@ app.use(mongoSanitize())
 
 // Data sanitization against XSS
 app.use(xss())
+
+// Prevent HTTP parameter pollution
+app.use(
+  hpp({
+    whitelist: ['name']
+  })
+)
 
 // app.use(express.urlencoded({ extended: false }))
 // app.use(cookieParser())
