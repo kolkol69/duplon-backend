@@ -17,7 +17,10 @@
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-mongo-sanitize": "^2.0.1",
+    "express-rate-limit": "^5.2.3",
     "express-readme": "^0.0.5",
+    "helmet": "^4.2.0",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "jsonwebtoken": "^8.5.1",
@@ -30,7 +33,8 @@
     "password-generator": "^2.2.3",
     "qrcode": "^1.4.4",
     "ramda": "^0.27.1",
-    "validator": "^13.5.2"
+    "validator": "^13.5.2",
+    "xss-clean": "^0.1.1"
   },
   "devDependencies": {
     "eslint": "^7.13.0",
