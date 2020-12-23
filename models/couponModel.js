@@ -12,7 +12,7 @@ const statusHistorySchema = new Schema({
     required: true,
     enum: ['issued', 'expired', 'redeemed']
   },
-  changeDate: { type: Date, default: Date.now() }
+  changeDate: { type: Date, default: Date(Date.now()) }
 })
 
 const couponSchema = new Schema({
@@ -20,7 +20,7 @@ const couponSchema = new Schema({
   PCId: { type: ObjectId, default: null }, // pairedCouponId
   history: [statusHistorySchema],
   expDate: { type: Date, default: nextMonth },
-  createdAt: { type: Date, default: Date.now() },
+  createdAt: { type: Date, default: Date(Date.now()) },
   typeId: { type: ObjectId, require: true }
 })
 const Coupon = mongoose.model('Coupon', couponSchema)
