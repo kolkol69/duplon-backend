@@ -62,6 +62,7 @@ exports.getOne = (Model) =>
 
 exports.getAll = (Model) =>
   catchAsync(async (req, res, _next) => {
+    // To allow nested routes for tenant
     let filter = {}
 
     if (req.params.tenantId) {
