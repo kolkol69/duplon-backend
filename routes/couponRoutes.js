@@ -15,20 +15,25 @@ const {
   getQrCode,
   deleteAllCoupons
 } = couponController
+// redeem should use POST, but navigating thru
+// qr code url let us do only GET requests
+
+router.route('/redeem').get(redeemCoupon)
+router.route('/generate-qrcode/:id').get(getQrCode)
+
+// Protected Routes
+router.use(protect)
 
 router
   .route('/')
-  .get(protect, getAllCoupons)
-  .post(protect, issueCoupon)
-  .delete(protect, restrictTo('head', 'admin'), deleteAllCoupons)
-// redeem should use POST, but navigating thru
-// qr code url let us do only GET requests
-router.route('/redeem').get(redeemCoupon)
-router.route('/generate-qrcode/:id').get(getQrCode)
+  .get(getAllCoupons)
+  .post(issueCoupon)
+  .delete(restrictTo('head', 'admin'), deleteAllCoupons)
+
 router
   .route('/:id')
-  .get(protect, getCoupon)
-  .patch(protect, updateCoupon)
-  .delete(protect, restrictTo('head', 'admin'), deleteCoupon)
+  .get(getCoupon)
+  .patch(updateCoupon)
+  .delete(restrictTo('head', 'admin'), deleteCoupon)
 
 module.exports = router

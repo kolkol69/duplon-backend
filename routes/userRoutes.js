@@ -29,18 +29,23 @@ const {
   updateUser,
   deleteUser,
   updateMe,
-  deleteMe
+  deleteMe,
+  getMe
 } = userController
 
-router.patch('/updateMe', protect, updateMe)
-router.delete('/deleteMe', protect, deleteMe)
+// Protected Routes
+router.use(protect)
+
+router.get('/me', getMe, getUser)
+router.patch('/updateMe', updateMe)
+router.delete('/deleteMe', deleteMe)
 
 router.route('/').get(getAllUsers).post(createUser)
 
 router
   .route('/:id')
-  .get(protect, restrictTo('head', 'admin'), getUser)
-  .patch(protect, restrictTo('head', 'admin'), updateUser)
-  .delete(protect, restrictTo('admin'), deleteUser)
+  .get(restrictTo('head', 'admin'), getUser)
+  .patch(restrictTo('head', 'admin'), updateUser)
+  .delete(restrictTo('admin'), deleteUser)
 
 module.exports = router

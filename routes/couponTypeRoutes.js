@@ -14,20 +14,17 @@ const {
   setUserTenantIds
 } = couponTypeController
 
+// Protected Routes
+router.use(protect)
 router
   .route('/')
-  .get(protect, getAllCouponTypes)
-  .post(
-    protect,
-    restrictTo('head', 'admin'),
-    setUserTenantIds,
-    createCouponType
-  )
+  .get(getAllCouponTypes)
+  .post(restrictTo('head', 'admin'), setUserTenantIds, createCouponType)
 
 router
   .route('/:id')
-  .get(protect, getCouponType)
-  .patch(protect, updateCouponType)
-  .delete(protect, restrictTo('head', 'admin'), deleteCouponType)
+  .get(getCouponType)
+  .patch(updateCouponType)
+  .delete(restrictTo('head', 'admin'), deleteCouponType)
 
 module.exports = router

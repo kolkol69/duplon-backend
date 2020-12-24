@@ -15,6 +15,12 @@ const filterObj = (obj, ...fields) => {
   return newObj
 }
 
+exports.getMe = catchAsync(async (req, res, next) => {
+  req.params.id = req.user.id
+
+  next()
+})
+
 exports.deleteMe = catchAsync(async (req, res, _next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false })
 

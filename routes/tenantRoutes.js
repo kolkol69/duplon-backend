@@ -17,10 +17,13 @@ const {
   deleteTenant
 } = tenantController
 
+// Protected Routes
+router.use(protect)
+
 router.use('/:tenantId/coupons-type', couponTypeRouter)
 router.use('/:tenantId/coupons', couponRouter)
 router.use('/:tenantId/users', userRouter)
 
-router.route('/').get(protect, getAllTenants).post(createTenant)
+router.route('/').get(getAllTenants).post(createTenant)
 router.route('/:id').get(getTenant).patch(updateTenant).delete(deleteTenant)
 module.exports = router
