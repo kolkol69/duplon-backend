@@ -5,22 +5,21 @@ const crypto = require('crypto')
 
 const { Schema, SchemaTypes } = mongoose
 const { ObjectId } = SchemaTypes
-const userSchema = new Schema(
+const clientSchema = new Schema(
   {
-    tenant: { type: ObjectId, ref: 'Tenant', required: true },
-    role: {
-      type: String,
-      enum: ['user', 'head', 'admin'],
-      // TODO: change to 'user' for prod
-      default: 'admin'
-    },
-    name: String,
+    name: { type: String, required: [true, 'Please provide a name'] },
     email: {
       type: String,
       required: [true, 'Please provide an email address'],
       unique: true,
       lowercase: true,
       validate: [validator.isEmail, 'Please provide a valid email address']
+    },
+    role: {
+      type: String,
+      enum: ['user', 'admin'],
+      // TODO: change to 'user' for prod
+      default: 'admin'
     },
     password: {
       type: String,
@@ -38,6 +37,13 @@ const userSchema = new Schema(
         message: 'Passwords are not the same!'
       }
     },
+    coupons: [
+      {
+        type: ObjectId,
+        ref: 'Coupon',
+        default: null
+      }
+    ],
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
@@ -53,7 +59,7 @@ const userSchema = new Schema(
   }
 )
 
-userSchema.pre('save', async function onSave(next) {
+clientSchema.pre('save', async function onSave(next) {
   if (!this.isModified('password')) {
     return next()
   }
@@ -63,14 +69,14 @@ userSchema.pre('save', async function onSave(next) {
   next()
 })
 
-userSchema.methods.correctPassword = function checkPassword(
+clientSchema.methods.correctPassword = function checkPassword(
   candidatePassword,
   userPassword
 ) {
   return bcrypt.compare(candidatePassword, userPassword)
 }
 
-userSchema.methods.changedPasswordAfter = function checkIsPasswordChanged(
+clientSchema.methods.changedPasswordAfter = function checkIsPasswordChanged(
   JWTTimestamp
 ) {
   if (this.passwordChangedAt) {
@@ -82,7 +88,7 @@ userSchema.methods.changedPasswordAfter = function checkIsPasswordChanged(
   return false
 }
 
-userSchema.methods.createPasswordResetToken = function createToken() {
+clientSchema.methods.createPasswordResetToken = function createToken() {
   const resetToken = crypto.randomBytes(32).toString('hex')
 
   this.passwordResetToken = crypto
@@ -95,7 +101,7 @@ userSchema.methods.createPasswordResetToken = function createToken() {
   return resetToken
 }
 
-userSchema.pre('save', function updatePasswordChangeAt(next) {
+clientSchema.pre('save', function updatePasswordChangeAt(next) {
   if (!this.isModified('password') || this.isNew) {
     return next()
   }
@@ -104,19 +110,19 @@ userSchema.pre('save', function updatePasswordChangeAt(next) {
   next()
 })
 
-userSchema.pre(/^find/, function populate(next) {
-  this.populate({
-    path: 'tenant',
-    select: '-__v'
-  })
-  next()
-})
+// clientSchema.pre(/^find/, function populate(next) {
+//   this.populate({
+//     path: 'tenant',
+//     select: '-__v'
+//   })
+//   next()
+// })
 
-userSchema.pre(/^find/, function hideInactiveUsers(next) {
-  this.find({ active: { $ne: false } })
-  next()
-})
+// clientSchema.pre(/^find/, function hideInactiveUsers(next) {
+//   this.find({ active: { $ne: false } })
+//   next()
+// })
 
-const User = mongoose.model('User', userSchema)
+const Client = mongoose.model('Client', clientSchema)
 
-module.exports = User
+module.exports = Client

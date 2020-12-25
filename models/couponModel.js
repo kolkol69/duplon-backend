@@ -29,7 +29,8 @@ const couponSchema = new Schema(
     url: String,
     expDate: { type: Date, default: nextMonth },
     createdAt: { type: Date, default: Date.now },
-    type: { type: ObjectId, ref: 'CouponType' }
+    type: { type: ObjectId, ref: 'CouponType' },
+    status: { type: String, default: 'issued' }
   },
   {
     toJSON: { virtuals: true },

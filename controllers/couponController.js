@@ -6,11 +6,6 @@ const AppError = require('../utils/appError')
 const factory = require('./handleFactory')
 
 const apiUrl = process.env.API_URL
-const COUPON_STATUSES = {
-  redemeed: 'redeemed',
-  expired: 'expired',
-  issued: 'issued'
-}
 
 exports.getQrCode = catchAsync(async (req, res, _next) => {
   const coupon = await Coupon.findById(req.body.couponId)
@@ -30,16 +25,24 @@ exports.getQrCode = catchAsync(async (req, res, _next) => {
 })
 
 exports.redeemCoupon = catchAsync(async (req, res, _next) => {
-  const { userId, couponId } = req.query
+  // TODO: validate if the coupon isn't already 'redeemed' when
+  // someone tries to redeeme it one more time
+
+  // TODO: check if coupon is not expired before redeeming it,
+  // if it is expired, than return appropriate msg and chaneg it status
+
+  // TODO: run script to check all coupons for their expiration
+
+  const { userId, couponId, status } = req.query
 
   const history = {
     userId,
-    status: COUPON_STATUSES.redemeed
+    status
   }
 
   const coupon = await Coupon.findOneAndUpdate(
     { _id: couponId },
-    { $push: { history } }
+    { $push: { history }, status }
   )
 
   if (!coupon) {
@@ -47,7 +50,8 @@ exports.redeemCoupon = catchAsync(async (req, res, _next) => {
   }
 
   res.status(200).json({
-    status: 'success'
+    status: 'success',
+    data: { coupon }
   })
 })
 

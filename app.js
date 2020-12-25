@@ -13,6 +13,7 @@ const path = require('path')
 const AppError = require('./utils/appError')
 const globalErrorHandler = require('./controllers/errorController')
 const tenantRouter = require('./routes/tenantRoutes')
+const clientRouter = require('./routes/clientRoutes')
 const userRouter = require('./routes/userRoutes')
 const couponTypeRouter = require('./routes/couponTypeRoutes')
 const couponRouter = require('./routes/couponRoutes')
@@ -92,6 +93,7 @@ require('express-readme')(app, {
 
 app.use('/send-email', emailRouter)
 
+app.use('/api/v1/clients', clientRouter)
 app.use('/api/v1/users', userRouter)
 app.use('/api/v1/tenants', tenantRouter)
 app.use('/api/v1/coupons-type', couponTypeRouter)
