@@ -30,7 +30,8 @@ const {
   deleteUser,
   updateMe,
   deleteMe,
-  getMe
+  getMe,
+  addCoupon
 } = clientController
 
 // Protected Routes
@@ -40,12 +41,14 @@ router.get('/me', getMe, getUser)
 router.patch('/updateMe', updateMe)
 router.delete('/deleteMe', deleteMe)
 
+router.get('/add-coupon/:couponId', addCoupon)
+
 router.route('/').get(getAllUsers).post(createUser)
 
 router
   .route('/:id')
-  .get(restrictTo('head', 'admin'), getUser)
-  .patch(restrictTo('head', 'admin'), updateUser)
+  .get(restrictTo('admin'), getUser)
+  .patch(restrictTo('admin'), updateUser)
   .delete(restrictTo('admin'), deleteUser)
 
 module.exports = router

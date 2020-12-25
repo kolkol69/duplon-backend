@@ -110,13 +110,13 @@ clientSchema.pre('save', function updatePasswordChangeAt(next) {
   next()
 })
 
-// clientSchema.pre(/^find/, function populate(next) {
-//   this.populate({
-//     path: 'tenant',
-//     select: '-__v'
-//   })
-//   next()
-// })
+clientSchema.pre(/^find/, function populate(next) {
+  this.populate({
+    path: 'coupons',
+    select: '-history'
+  })
+  next()
+})
 
 // clientSchema.pre(/^find/, function hideInactiveUsers(next) {
 //   this.find({ active: { $ne: false } })

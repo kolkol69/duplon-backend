@@ -21,8 +21,9 @@ exports.addCoupon = catchAsync(async (req, res, next) => {
   //   params: req.params.couponId
   // }
   const client = await Client.findOneAndUpdate(
-    { _id: req.body.userId, coupons: { $ne: req.params.couponId } },
-    { $push: { coupons: req.params.couponId } }
+    { _id: req.body.userId },
+    { $addToSet: { coupons: req.params.couponId } },
+    { new: true }
   )
 
   if (!client) {
