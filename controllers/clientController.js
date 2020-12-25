@@ -15,14 +15,38 @@ const filterObj = (obj, ...fields) => {
   return newObj
 }
 
+exports.addCoupon = catchAsync(async (req, res, next) => {
+  // const client = {
+  //   body: req.body.userId,
+  //   params: req.params.couponId
+  // }
+  const client = await Client.findOneAndUpdate(
+    { _id: req.body.userId, coupons: { $ne: req.params.couponId } },
+    { $push: { coupons: req.params.couponId } }
+  )
+
+  if (!client) {
+    return next(new AppError('Could not find client with that id'))
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: { client }
+  })
+})
+
 exports.getMe = catchAsync(async (req, res, next) => {
   req.params.id = req.user.id
 
   next()
 })
 
-exports.deleteMe = catchAsync(async (req, res, _next) => {
-  await Client.findByIdAndUpdate(req.user.id, { active: false })
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  const client = await Client.findByIdAndUpdate(req.user.id, { active: false })
+
+  if (!client) {
+    return next(new AppError('Could not find client with that id'))
+  }
 
   res.status(204).json({
     status: 'success',

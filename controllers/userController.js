@@ -21,8 +21,12 @@ exports.getMe = catchAsync(async (req, res, next) => {
   next()
 })
 
-exports.deleteMe = catchAsync(async (req, res, _next) => {
-  await User.findByIdAndUpdate(req.user.id, { active: false })
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(req.user.id, { active: false })
+
+  if (!user) {
+    return next(new AppError('Could not find client with that id'))
+  }
 
   res.status(204).json({
     status: 'success',
