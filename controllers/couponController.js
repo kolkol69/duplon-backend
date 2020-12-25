@@ -7,15 +7,12 @@ const factory = require('./handleFactory')
 
 const apiUrl = process.env.API_URL
 
-exports.getQrCode = catchAsync(async (req, res, _next) => {
+exports.getQrCode = catchAsync(async (req, res, next) => {
   const coupon = await Coupon.findById(req.body.couponId)
 
   QRCode.toDataURL(coupon.url, (err, url) => {
     if (err) {
-      res.status(400).json({
-        status: 'fail',
-        error: err
-      })
+      return next(new AppError(`Error creating QR Code: ${err}`, 400))
     }
     res.status(200).json({
       status: 'success',
@@ -24,7 +21,7 @@ exports.getQrCode = catchAsync(async (req, res, _next) => {
   })
 })
 
-exports.redeemCoupon = catchAsync(async (req, res, _next) => {
+exports.redeemCoupon = catchAsync(async (req, res, next) => {
   // TODO: validate if the coupon isn't already 'redeemed' when
   // someone tries to redeeme it one more time
 
@@ -46,7 +43,7 @@ exports.redeemCoupon = catchAsync(async (req, res, _next) => {
   )
 
   if (!coupon) {
-    return new AppError('Could not find coupon with that id')
+    return next(new AppError('Could not find coupon with that id'))
   }
 
   res.status(200).json({
@@ -55,17 +52,14 @@ exports.redeemCoupon = catchAsync(async (req, res, _next) => {
   })
 })
 
-exports.issueCoupon = catchAsync(async (req, res, _next) => {
+exports.issueCoupon = catchAsync(async (req, res, next) => {
   const coupon = await Coupon.create(req.body)
 
   const url = `${apiUrl}/coupons/redeem?userId=${req.body.history.userId}&couponId=${coupon._id}`
 
   QRCode.toDataURL(url, (err, qrCode) => {
     if (err) {
-      res.status(400).json({
-        status: 'fail',
-        error: err
-      })
+      return next(new AppError(`Error creating QR Code: ${err}`, 400))
     }
 
     coupon.url = url
