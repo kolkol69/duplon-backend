@@ -7,7 +7,7 @@ const { Schema, SchemaTypes } = mongoose
 const { ObjectId } = SchemaTypes
 const clientSchema = new Schema(
   {
-    name: { type: String, required: [true, 'Please provide a name'] },
+    fullName: { type: String, required: [true, 'Please provide a name'] },
     email: {
       type: String,
       required: [true, 'Please provide an email address'],

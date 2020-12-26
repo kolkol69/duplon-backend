@@ -4,7 +4,7 @@ const authFactory = require('./authFactory')
 
 exports.signup = catchAsync(async (req, res, _next) => {
   const newUser = await Client.create({
-    name: req.body.name,
+    fullName: req.body.fullName,
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
