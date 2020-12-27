@@ -1,3 +1,4 @@
+const { isEmpty } = require('ramda')
 const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/appError')
 const APIFeatures = require('../utils/apiFeatures')
@@ -48,7 +49,9 @@ exports.updateOne = (Model) =>
 
 exports.getOne = (Model) =>
   catchAsync(async (req, res, _next) => {
-    const doc = await Model.findById(req.params.id)
+    const doc = isEmpty(req.params.options)
+      ? await Model.findById(req.params.id)
+      : await Model.findById(req.params.id).select(req.params.options)
 
     if (!doc) {
       return new AppError('No document found with that id')

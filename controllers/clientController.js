@@ -38,7 +38,10 @@ exports.addCoupon = catchAsync(async (req, res, next) => {
 
 exports.getMe = catchAsync(async (req, res, next) => {
   req.params.id = req.user.id
-
+  req.params.options = {
+    role: 0,
+    __v: 0
+  }
   next()
 })
 
