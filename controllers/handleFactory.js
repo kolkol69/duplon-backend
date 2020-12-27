@@ -49,6 +49,7 @@ exports.updateOne = (Model) =>
 
 exports.getOne = (Model) =>
   catchAsync(async (req, res, _next) => {
+    // TODO: use selectors for /me route both for client and for user
     const doc = isEmpty(req.params.options)
       ? await Model.findById(req.params.id)
       : await Model.findById(req.params.id).select(req.params.options)
