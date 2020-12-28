@@ -30,7 +30,7 @@ exports.updateOne = (Model) =>
     if (history) {
       await Model.findOneAndUpdate(
         { _id: req.params.id },
-        { $push: { history } },
+        { $addToSet: { history } },
         { upsert: true, new: true }
       )
     }

@@ -16,12 +16,8 @@ const filterObj = (obj, ...fields) => {
 }
 
 exports.addCoupon = catchAsync(async (req, res, next) => {
-  // const client = {
-  //   body: req.body.userId,
-  //   params: req.params.couponId
-  // }
   const client = await Client.findOneAndUpdate(
-    { _id: req.body.userId },
+    { _id: req.user.id },
     { $addToSet: { coupons: req.params.couponId } },
     { new: true }
   )

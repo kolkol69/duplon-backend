@@ -13,10 +13,7 @@ const sendErrorDev = (err, res) => {
 const sendErrorProd = (err, res) => {
   // Operationl, trusted error: send msg to the client
   if (err.isOperational) {
-    res.status(err.statusCode).json({
-      status: err.status,
-      message: err.message
-    })
+    res.status(err.statusCode).json(err)
     // Programming or other unknown errors: don't send msg to the clinet
   } else {
     // 1) Log error
