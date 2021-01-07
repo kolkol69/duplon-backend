@@ -15,12 +15,6 @@ const clientSchema = new Schema(
       lowercase: true,
       validate: [validator.isEmail, 'Please provide a valid email address']
     },
-    role: {
-      type: String,
-      enum: ['user', 'admin'],
-      // TODO: change to 'user' for prod
-      default: 'admin'
-    },
     password: {
       type: String,
       require: true,
