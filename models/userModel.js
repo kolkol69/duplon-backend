@@ -14,7 +14,7 @@ const userSchema = new Schema(
       // TODO: change to 'user' for prod
       default: 'admin'
     },
-    name: String,
+    fullName: String,
     email: {
       type: String,
       required: [true, 'Please provide an email address'],
