@@ -37,7 +37,8 @@ exports.redeemCoupon = catchAsync(async (req, res, next) => {
 
   // TODO: run script to check all coupons for their expiration
   const userId = req.user.id
-  const { couponId, status } = req.query
+  const status = 'redeemed'
+  const { couponId } = req.query
 
   const history = {
     userId,
