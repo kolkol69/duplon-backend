@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const { Schema, ObjectId } = mongoose
 const couponTypeSchema = new Schema(
   {
-    tenantId: { type: ObjectId, ref: 'Tenant' },
+    tenant: { type: ObjectId, ref: 'Tenant' },
     html: { type: String },
     discountType: {
       type: String,
