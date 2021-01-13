@@ -24,7 +24,7 @@ exports.deleteAll = (Model) =>
   })
 
 exports.updateOne = (Model) =>
-  catchAsync(async (req, res, _next) => {
+  catchAsync(async (req, res, next) => {
     const { history, ...reqBody } = req.body
 
     if (history) {
@@ -41,21 +41,21 @@ exports.updateOne = (Model) =>
     })
 
     if (!doc) {
-      return new AppError('No document found with that id')
+      return next(new AppError('No document found with that id'))
     }
 
     res.status(200).json({ status: 'success', data: { data: doc } })
   })
 
 exports.getOne = (Model) =>
-  catchAsync(async (req, res, _next) => {
+  catchAsync(async (req, res, next) => {
     // TODO: use selectors for /me route both for client and for user
     const doc = isEmpty(req.params.options)
       ? await Model.findById(req.params.id)
       : await Model.findById(req.params.id).select(req.params.options)
 
     if (!doc) {
-      return new AppError('No document found with that id')
+      return next(new AppError('No document found with that id'))
     }
 
     res.json({
@@ -65,7 +65,7 @@ exports.getOne = (Model) =>
   })
 
 exports.getAll = (Model) =>
-  catchAsync(async (req, res, _next) => {
+  catchAsync(async (req, res, next) => {
     // To allow nested routes for tenant
     let filter = {}
 
@@ -79,6 +79,10 @@ exports.getAll = (Model) =>
       .paginate()
     const doc = await features.query
 
+    if (!doc) {
+      return next(new AppError('No document found with that id'))
+    }
+
     res.json({
       status: 'success',
       result: doc.length,
@@ -87,8 +91,18 @@ exports.getAll = (Model) =>
   })
 
 exports.createOne = (Model) =>
-  catchAsync(async (req, res, _next) => {
-    const newDoc = await Model.create(req.body)
+  catchAsync(async (req, res, next) => {
+    const { body } = req
+
+    if (req.params.tenantId) {
+      body.tenantId = req.params.tenantId
+    }
+
+    const newDoc = await Model.create(body)
+
+    if (!newDoc) {
+      return next(new AppError('Document was not created!'))
+    }
 
     res.status(201).json({ status: 'success', data: { data: newDoc } })
   })
