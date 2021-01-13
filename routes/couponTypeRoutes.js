@@ -16,8 +16,10 @@ const {
 
 // Protected Routes
 router.use(protect)
+router.route('/').get(getAllCouponTypes)
+
 router
-  .route('/')
+  .route('/tenants/:tenantId')
   .get(getAllCouponTypes)
   .post(restrictTo('head', 'admin'), setUserTenantIds, createCouponType)
 

@@ -42,6 +42,8 @@ router.delete('/deleteMe', deleteMe)
 
 router.route('/').get(getAllUsers).post(createUser)
 
+router.use('/tenants/:tenantId', getAllUsers)
+
 router
   .route('/:id')
   .get(restrictTo('head', 'admin'), getUser)
