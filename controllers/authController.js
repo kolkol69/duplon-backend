@@ -1,25 +1,8 @@
 const User = require('../models/userModel')
 const Tenant = require('../models/tenantModel')
-const catchAsync = require('../utils/catchAsync')
 const authFactory = require('./authFactory')
 
-exports.signup = catchAsync(async (req, res, _next) => {
-  const newTenant = await Tenant.create({
-    name: req.body.tenantName
-  })
-  const newUser = await User.create({
-    tenant: newTenant._id,
-    login: req.body.login,
-    email: req.body.email,
-    password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm,
-    passwordChangedAt: req.body.passwordChangedAt,
-    role: req.body.role,
-    name: req.body.name
-  })
-
-  authFactory.createSendToken(newUser, 201, res)
-})
+exports.signup = authFactory.signup(Tenant, User)
 
 exports.login = authFactory.login(User)
 

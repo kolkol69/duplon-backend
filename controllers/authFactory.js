@@ -41,8 +41,6 @@ const createSendToken = (user, statusCode, res) => {
   })
 }
 
-exports.createSendToken = createSendToken
-
 exports.restrictTo = (...roles) => (req, res, next) => {
   // if (!roles.includes(req.user.role)) {
   //   return next(
@@ -99,6 +97,27 @@ exports.protect = (Model) =>
     // GRANTING ACCESS TO PROTECTED ROUTER
     req.user = user
     next()
+  })
+
+exports.signup = (Tenant, User) =>
+  catchAsync(async (req, res, _next) => {
+    const role = 'admin'
+    const passwordCreatedAt = new Date().toISOString().slice(0, 10)
+
+    const newTenant = await Tenant.create({
+      name: req.body.tenantName
+    })
+    const newUser = await User.create({
+      tenant: newTenant._id,
+      email: req.body.email,
+      password: req.body.password,
+      passwordConfirm: req.body.passwordConfirm,
+      passwordChangedAt: passwordCreatedAt,
+      role,
+      fullName: req.body.name
+    })
+
+    createSendToken(newUser, 201, res)
   })
 
 exports.login = (Model) =>
