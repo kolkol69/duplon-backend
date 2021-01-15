@@ -11,7 +11,7 @@ const userSchema = new Schema(
     role: {
       type: String,
       enum: ['user', 'head', 'admin'],
-      // TODO: change to 'user' for prod
+      // [noted] TODO: change to 'user' for prod
       default: 'admin'
     },
     fullName: String,

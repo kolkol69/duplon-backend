@@ -108,7 +108,7 @@ clientSchema.pre(/^find/, function populate(next) {
   this.populate({
     path: 'coupons',
     select: '-history',
-    // TODO: change $ne: 'redeemed'  => $eq: 'issued'
+    // [noted] TODO: change $ne: 'redeemed'  => $eq: 'issued'
     match: { status: { $ne: 'redeemed' } }
   })
   next()

@@ -29,13 +29,13 @@ const factory = require('./handleFactory')
 // })
 
 exports.redeemCoupon = catchAsync(async (req, res, next) => {
-  // TODO: validate if the coupon isn't already 'redeemed' when
+  // [noted] TODO: validate if the coupon isn't already 'redeemed' when
   // someone tries to redeeme it one more time
 
-  // TODO: check if coupon is not expired before redeeming it,
+  // [noted] TODO: check if coupon is not expired before redeeming it,
   // if it is expired, than return appropriate msg and chaneg it status
 
-  // TODO: run script to check all coupons for their expiration
+  // [noted] TODO: run script to check all coupons for their expiration
   const userId = req.user.id
   const status = 'redeemed'
   const { couponId } = req.query
