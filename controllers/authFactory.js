@@ -41,6 +41,7 @@ const createSendToken = (user, statusCode, res) => {
   })
 }
 
+exports.createSendToken = createSendToken
 exports.restrictTo = (...roles) => (req, res, next) => {
   // if (!roles.includes(req.user.role)) {
   //   return next(
@@ -114,7 +115,7 @@ exports.signup = (Tenant, User) =>
       passwordConfirm: req.body.passwordConfirm,
       passwordChangedAt: passwordCreatedAt,
       role,
-      fullName: req.body.name
+      fullName: req.body.fullName
     })
 
     createSendToken(newUser, 201, res)
