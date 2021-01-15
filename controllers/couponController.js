@@ -61,6 +61,12 @@ exports.redeemCoupon = catchAsync(async (req, res, next) => {
 })
 
 exports.issueCoupon = catchAsync(async (req, res, next) => {
+  req.body.history = {
+    userId: req.user.id,
+    status: 'issued'
+  }
+  req.body.tenant = req.user.tenant.id
+
   const coupon = await Coupon.create(req.body)
 
   QRCode.toDataURL(`${coupon._id}`, (err, qrCode) => {
