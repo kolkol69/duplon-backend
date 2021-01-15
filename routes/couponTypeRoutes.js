@@ -16,12 +16,12 @@ const {
 
 // Protected Routes
 router.use(protect)
-router.route('/').get(getAllCouponTypes)
-
 router
-  .route('/tenants/:tenantId')
+  .route('/')
   .get(getAllCouponTypes)
   .post(restrictTo('head', 'admin'), setUserTenantIds, createCouponType)
+
+router.route('/tenants/:tenantId').get(getAllCouponTypes)
 
 router
   .route('/:id')
