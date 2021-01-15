@@ -94,8 +94,8 @@ exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
     const { body } = req
 
-    if (req.params.tenantId) {
-      body.tenantId = req.params.tenantId
+    if (req.user.tenant.id) {
+      body.tenant = req.user.tenant.id
     }
 
     const newDoc = await Model.create(body)
