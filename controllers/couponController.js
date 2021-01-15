@@ -5,10 +5,10 @@ const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/appError')
 const factory = require('./handleFactory')
 
-const apiUrl =
-  process.env.NODE_ENV === 'production'
-    ? process.env.API_URL_PROD
-    : process.env.API_URL
+// const apiUrl =
+//   process.env.NODE_ENV === 'production'
+//     ? process.env.API_URL_PROD
+//     : process.env.API_URL
 
 // exports.createQrCodeForShop = catchAsync(async (req, res, next) => {
 //   const userId = '5fe21e282b7a9f07595485d9'
