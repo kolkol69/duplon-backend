@@ -14,7 +14,10 @@ const userSchema = new Schema(
       // [noted] TODO: change to 'user' for prod
       default: 'admin'
     },
-    fullName: String,
+    fullName: {
+      type: String,
+      required: [true, 'Please provide your name']
+    },
     email: {
       type: String,
       required: [true, 'Please provide an email address'],
@@ -80,6 +83,19 @@ userSchema.methods.changedPasswordAfter = function checkIsPasswordChanged(
   }
 
   return false
+}
+
+userSchema.methods.createInviteToken = function createToken() {
+  const inviteToken = crypto.randomBytes(32).toString('hex')
+
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(inviteToken)
+    .digest('hex')
+
+  this.passwordResetExpires = Date.now() + 24 * 60 * 60 * 1000
+
+  return inviteToken
 }
 
 userSchema.methods.createPasswordResetToken = function createToken() {
