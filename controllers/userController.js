@@ -1,4 +1,5 @@
 const User = require('../models/userModel')
+const Tenant = require('../models/tenantModel')
 const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/appError')
 const factory = require('./handleFactory')
@@ -42,6 +43,17 @@ exports.updateMe = catchAsync(async (req, res, next) => {
       new AppError(
         'This route is not for password update. Please use /updateMyPassword route for that.'
       )
+    )
+  }
+
+  if (req.body.tenantName) {
+    await Tenant.findByIdAndUpdate(
+      req.user.tenant.id,
+      { name: req.body.tenantName },
+      {
+        new: true,
+        runValidators: true
+      }
     )
   }
 
