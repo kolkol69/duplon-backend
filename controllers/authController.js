@@ -12,6 +12,8 @@ exports.restrictTo = authFactory.restrictTo
 
 exports.forgotPassword = authFactory.forgotPassword(User)
 
+exports.invite = authFactory.invite(User)
+
 exports.resetPassword = authFactory.resetPassword(User)
 
 exports.updatePassword = authFactory.updatePassword(User)

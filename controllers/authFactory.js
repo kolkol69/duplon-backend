@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const randomGenerator = require('password-generator')
 const crypto = require('crypto')
 const { promisify } = require('util')
 const catchAsync = require('../utils/catchAsync')
@@ -140,6 +141,61 @@ exports.login = (Model) =>
     }
     // 3) If everything is ok, send token to the client
     createSendToken(user, 200, res)
+  })
+
+exports.invite = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const { body } = req
+
+    if (req.user.tenant.id) {
+      body.tenant = req.user.tenant.id
+    } else {
+      return next(new AppError('Could not found tenant with provided id!', 404))
+    }
+    const randomPassword = randomGenerator(12, false)
+
+    body.password = randomPassword
+    body.passwordConfirm = randomPassword
+
+    const user = await Model.create(body)
+
+    if (!user) {
+      return next(new AppError('User was not created!'))
+    }
+
+    // 2) Generate the random invite token
+    const inviteToken = user.createInviteToken()
+
+    await user.save({ validateBeforeSave: false })
+
+    // 3) Send it to user's email
+    const inviteURL = `${req.protocol}://127.0.0.1:3000/invite/${inviteToken}`
+
+    const message = `${body.fullName} you are invited to join the coumerang! Please follow the link ${inviteURL} and create a password for you to login.`
+
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: 'Your invite link (valid for 24 hours)',
+        message
+      })
+
+      res.status(200).json({
+        status: 'success',
+        message: 'Token sent to email!'
+      })
+    } catch (err) {
+      user.passwordResetToken = undefined
+      user.passwordResetExpires = undefined
+      await user.save({ validateBeforeSave: false })
+
+      return next(
+        new AppError(
+          'There was an error sending the email. Try again later.',
+          500
+        )
+      )
+    }
   })
 
 exports.forgotPassword = (Model) =>

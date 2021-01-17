@@ -11,7 +11,8 @@ const {
   restrictTo,
   resetPassword,
   forgotPassword,
-  updatePassword
+  updatePassword,
+  invite
 } = authController
 
 router.post('/login', login)
@@ -42,6 +43,7 @@ router.delete('/deleteMe', deleteMe)
 
 router.route('/').get(getAllUsers).post(createUser)
 
+router.use('/invite', invite)
 router.use('/tenants', getAllUsers)
 
 router
