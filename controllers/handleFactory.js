@@ -69,8 +69,10 @@ exports.getAll = (Model) =>
     // To allow nested routes for tenant
     let filter = {}
 
-    if (req.params.tenantId) {
-      filter = { tenant: req.params.tenantId }
+    // TODO: if we dont check 2nd condition we will get 0 result.
+    // needs to be handled better than url check
+    if (req.user.tenant.id && req.baseUrl !== '/api/v1/tenants') {
+      filter = { tenant: req.user.tenant.id }
     }
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()

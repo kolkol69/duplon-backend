@@ -42,7 +42,7 @@ router.delete('/deleteMe', deleteMe)
 
 router.route('/').get(getAllUsers).post(createUser)
 
-router.use('/tenants/:tenantId', getAllUsers)
+router.use('/tenants', getAllUsers)
 
 router
   .route('/:id')

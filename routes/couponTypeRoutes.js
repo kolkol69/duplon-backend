@@ -21,7 +21,7 @@ router
   .get(getAllCouponTypes)
   .post(restrictTo('head', 'admin'), setUserTenantIds, createCouponType)
 
-router.route('/tenants/:tenantId').get(getAllCouponTypes)
+router.route('/tenants').get(getAllCouponTypes)
 
 router
   .route('/:id')

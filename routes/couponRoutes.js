@@ -30,7 +30,7 @@ router
   .post(issueCoupon)
   .delete(restrictTo('head', 'admin'), deleteAllCoupons)
 
-router.use('/tenants/:tenantId', getAllCoupons)
+router.use('/tenants', getAllCoupons)
 
 router
   .route('/:id')
