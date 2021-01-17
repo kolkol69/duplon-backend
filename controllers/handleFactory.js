@@ -5,6 +5,10 @@ const APIFeatures = require('../utils/apiFeatures')
 
 exports.deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
+    if (req.params.id === req.user.id) {
+      return next(new AppError('You cannot delete yourself!'))
+    }
+
     const doc = await Model.findByIdAndDelete(req.params.id)
 
     if (!doc) {
