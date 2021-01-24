@@ -47,7 +47,8 @@ exports.redeemCoupon = catchAsync(async (req, res, next) => {
 
   const coupon = await Coupon.findOneAndUpdate(
     { _id: couponId },
-    { $addToSet: { history }, status }
+    { $addToSet: { history }, status },
+    { new: true }
   )
 
   if (!coupon) {
