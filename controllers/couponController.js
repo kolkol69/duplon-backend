@@ -1,4 +1,6 @@
 require('dotenv').config()
+
+const moment = require('moment')
 const QRCode = require('qrcode')
 const Coupon = require('../models/couponModel')
 const catchAsync = require('../utils/catchAsync')
@@ -29,35 +31,50 @@ const factory = require('./handleFactory')
 // })
 
 exports.redeemCoupon = catchAsync(async (req, res, next) => {
-  // [noted] TODO: validate if the coupon isn't already 'redeemed' when
-  // someone tries to redeeme it one more time
-
-  // [noted] TODO: check if coupon is not expired before redeeming it,
-  // if it is expired, than return appropriate msg and chaneg it status
-
   // [noted] TODO: run script to check all coupons for their expiration
   const userId = req.user.id
   const status = 'redeemed'
   const { couponId } = req.query
+  const coupon = await Coupon.findOne({ _id: couponId })
+
+  if (!coupon) {
+    return next(new AppError('Could not find coupon with that id'))
+  }
+
+  const today = new Date()
+  const expDate = new Date(coupon.expDate)
+  const isExpired = today > expDate
+
+  const expirationDate = moment(expDate).format('dddd, MMMM Do YYYY')
+
+  if (isExpired) {
+    if (coupon.status !== 'expired') {
+      coupon.status = 'expired'
+      await coupon.save()
+    }
+    return next(
+      new AppError(`Coupon expired! Was valid till: ${expirationDate}`)
+    )
+  }
+
+  if (coupon.status === 'redeemed') {
+    return next(new AppError('Coupon was already redeemed!'))
+  }
 
   const history = {
     userId,
     status
   }
 
-  const coupon = await Coupon.findOneAndUpdate(
+  const updateCoupon = await Coupon.findByIdAndUpdate(
     { _id: couponId },
     { $addToSet: { history }, status },
     { new: true }
   )
 
-  if (!coupon) {
-    return next(new AppError('Could not find coupon with that id'))
-  }
-
   res.status(200).json({
     status: 'success',
-    data: { coupon }
+    data: { coupon: updateCoupon }
   })
 })
 
