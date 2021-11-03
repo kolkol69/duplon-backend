@@ -35,7 +35,7 @@
     "password-generator": "^2.2.3",
     "qrcode": "^1.4.4",
     "ramda": "^0.27.1",
-    "validator": "^13.5.2",
+    "validator": "^13.7.0",
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
